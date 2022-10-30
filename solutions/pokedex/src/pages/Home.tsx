@@ -105,7 +105,7 @@ export const Home = () => {
                 <Row><Card.Title>{pokemon.name}</Card.Title>
                 </Row>
                 <Row><Card.Text>
-                  {pokemon.name}
+                  {pokemon.types.join(', ')}
                 </Card.Text></Row>
               </Col>
               <Col>
