@@ -1,19 +1,23 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { Row, ButtonGroup, ToggleButton, Form, Container, Col } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Row, ButtonGroup, ToggleButton, Form, Container, Col, Card, Button } from "react-bootstrap";
+import { PokemonListResponse } from "../common/models/pokemon-management";
 import { PokemonService } from "../common/services";
 
 export const Home = () => {
-  // Variables
+  // Variables associated to user input
   const [show, setShow] = useState('all');
-
-  const shows = [
+  const showValues = [
     { name: 'All', value: 'all' },
     { name: 'Favorites', value: 'favorites' },
   ];
 
   // const [loading, setLoading] = useState(true);
   const [selectedPokemonType, setSelectedPokemonType] = useState('');
+  const [searchText, setSearchText] = useState('');
+
+  // Variables associated to api
   const [pokemonTypes, setPokemonTypes] = useState<string[]>([]);
+  const [pokemons, setPokemons] = useState<PokemonListResponse>();
 
 
 
@@ -37,10 +41,12 @@ export const Home = () => {
 
     // pokemonService.getPokemonTypes().then((data) => {console.log('the data',data); setPokemonTypes(data);});
     let mounted = true;
-    Promise.all([pokemonService.getPokemonTypes()])
-      .then(([pokemonTypeList]) => {
+    Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons()])
+      .then(([pokemonTypeList, pokemonList]) => {
         if (mounted) {
           setPokemonTypes(pokemonTypeList);
+          setPokemons(pokemonList);
+          console.log('pokrmonlist', pokemonList);
         }
       })
       .catch((error) => {
@@ -53,14 +59,12 @@ export const Home = () => {
     // return () => mounted = false;
   }, [])
 
-  const handleSelectPokemonType = (change: ChangeEvent<HTMLSelectElement>) => { setSelectedPokemonType(change.target.value); };
-
   return (
     // <Loader loading={loading}>
     <Container>
       <Row>
         <ButtonGroup>
-          {shows.map((showValue, idx) => (
+          {showValues.map((showValue, idx) => (
             <ToggleButton
               key={idx}
               id={`show-${idx}`}
@@ -78,19 +82,51 @@ export const Home = () => {
       </Row>
       <Row>
         <Col>
-          <Form.Control size="sm" type="text" placeholder="Small text" />
+          <Form.Control size="sm" type="text" placeholder="Search" onChange={(change) => setSearchText(change.target.value)} value={searchText} />
         </Col>
         <Col>
-          <Form.Select size="sm" onChange={handleSelectPokemonType} value={selectedPokemonType}>
+          <Form.Select size="sm" onChange={(change) => setSelectedPokemonType(change.target.value)} value={selectedPokemonType}>
             <option value=''>Type</option>
             {pokemonTypes && pokemonTypes.map((pokemonType) => {
               return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
             })}
           </Form.Select>
         </Col>
+
       </Row>
-      {selectedPokemonType}
-      {show}
+      {pokemons && pokemons.items.map((pokemon) => {
+        return <Card key={pokemon.id}>
+          <Card.Body>
+            <Card.Img variant="top" src={pokemon.image} />
+          </Card.Body>
+          <Card.Header>
+            <Row>
+              <Col>
+                <Row><Card.Title>{pokemon.name}</Card.Title>
+                </Row>
+                <Row><Card.Text>
+                  {pokemon.name}
+                </Card.Text></Row>
+              </Col>
+              <Col>
+                {/* <ToggleButton
+                  className="mb-2"
+                  id="toggle-check"
+                  type="checkbox"
+                  variant="outline-primary"
+                  checked={checked}
+                  value="1"
+                  onChange={(e) => setChecked(e.currentTarget.checked)}
+                >
+                  Checked
+                </ToggleButton> */}
+                <Button variant="outline-danger" className="bi bi-heart-fill" />
+              </Col>
+            </Row>
+          </Card.Header>
+        </Card>;
+      })}
+
     </Container>
     // </Loader>
   );

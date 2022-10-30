@@ -1,5 +1,8 @@
 import { PokemonSummary } from "./pokemon-summary";
 
+/**
+ * Pokemon contains details of the Pokemon
+ */
 export interface Pokemon {
     id: string;
     name: string;
