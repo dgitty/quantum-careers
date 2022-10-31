@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Row, ButtonGroup, ToggleButton, Form, Container, Col, Card, Button } from "react-bootstrap";
-import { PokemonListResponse } from "../common/models/pokemon-management";
+import { Row, ButtonGroup, ToggleButton, Form, Col, Card, Button } from "react-bootstrap";
+import { PokemonListResponse, PokemonSummary } from "../common/models/pokemon-management";
 import { PokemonService } from "../common/services";
 
 export const Home = () => {
@@ -59,10 +59,44 @@ export const Home = () => {
     // return () => mounted = false;
   }, [])
 
+  const display = (pokemon: PokemonSummary) => {
+    return      <Card key={pokemon.id}>
+        <Card.Body>
+          <Card.Img variant="top" src={pokemon.image} />
+        </Card.Body>
+        <Card.Header>
+          <Row>
+            <Col xs={10}>
+              <Row><Card.Title>{pokemon.name}</Card.Title>
+              </Row>
+              <Row><Card.Text>
+                {pokemon.types.join(', ')}
+              </Card.Text></Row>
+            </Col>
+            <Col >
+              {/* <ToggleButton
+            className="mb-2"
+            id="toggle-check"
+            type="checkbox"
+            variant="outline-primary"
+            checked={checked}
+            value="1"
+            onChange={(e) => setChecked(e.currentTarget.checked)}
+          >
+            Checked
+          </ToggleButton> */}
+              <Button style={{ position: 'absolute', bottom: '0', right: '0' }} variant="outline-danger" className="mb-2 bi bi-heart-fill" />
+            </Col>
+          </Row>
+        </Card.Header>
+      </Card>;
+
+
+  }
   return (
     // <Loader loading={loading}>
-    <Container>
-      <Row>
+    <>
+      <Row className="mb-2">
         <ButtonGroup>
           {showValues.map((showValue, idx) => (
             <ToggleButton
@@ -80,14 +114,14 @@ export const Home = () => {
           ))}
         </ButtonGroup>
       </Row>
-      <Row>
+      <Row className="mb-2">
         <Col xs={7}>
           <Form.Control type="text" placeholder="Search" onChange={(change) => setSearchText(change.target.value)} value={searchText} />
         </Col>
         <Col>
           <Form.Select onChange={(change) => setSelectedPokemonType(change.target.value)} value={selectedPokemonType}>
             <option value=''>Type</option>
-            {pokemonTypes && pokemonTypes.map((pokemonType) => {
+            {pokemonTypes.map((pokemonType) => {
               return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
             })}
           </Form.Select>
@@ -98,40 +132,17 @@ export const Home = () => {
         </Col>
 
       </Row>
-      {pokemons && pokemons.items.map((pokemon) => {
-        return <Card key={pokemon.id}>
-          <Card.Body>
-            <Card.Img variant="top" src={pokemon.image} />
-          </Card.Body>
-          <Card.Header>
-            <Row>
-              <Col>
-                <Row><Card.Title>{pokemon.name}</Card.Title>
-                </Row>
-                <Row><Card.Text>
-                  {pokemon.types.join(', ')}
-                </Card.Text></Row>
-              </Col>
-              <Col>
-                {/* <ToggleButton
-                  className="mb-2"
-                  id="toggle-check"
-                  type="checkbox"
-                  variant="outline-primary"
-                  checked={checked}
-                  value="1"
-                  onChange={(e) => setChecked(e.currentTarget.checked)}
-                >
-                  Checked
-                </ToggleButton> */}
-                <Button variant="outline-danger" className="bi bi-heart-fill" />
-              </Col>
-            </Row>
-          </Card.Header>
-        </Card>;
-      })}
+      <hr />
+      <Row>
+        {show ==='all' && pokemons?.items.map((pokemon) => {
+          return display(pokemon);
+        })
 
-    </Container>
+
+        }
+      </Row>
+
+    </>
     // </Loader>
   );
 };
