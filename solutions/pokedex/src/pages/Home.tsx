@@ -81,16 +81,20 @@ export const Home = () => {
         </ButtonGroup>
       </Row>
       <Row>
-        <Col>
-          <Form.Control size="sm" type="text" placeholder="Search" onChange={(change) => setSearchText(change.target.value)} value={searchText} />
+        <Col xs={7}>
+          <Form.Control type="text" placeholder="Search" onChange={(change) => setSearchText(change.target.value)} value={searchText} />
         </Col>
         <Col>
-          <Form.Select size="sm" onChange={(change) => setSelectedPokemonType(change.target.value)} value={selectedPokemonType}>
+          <Form.Select onChange={(change) => setSelectedPokemonType(change.target.value)} value={selectedPokemonType}>
             <option value=''>Type</option>
             {pokemonTypes && pokemonTypes.map((pokemonType) => {
               return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
             })}
           </Form.Select>
+        </Col>
+        <Col>
+          <Button className="bi bi-list" variant="primary" />
+          <Button className="bi bi-grid-3x2" />
         </Col>
 
       </Row>
