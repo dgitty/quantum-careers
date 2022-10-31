@@ -18,6 +18,12 @@ $ npm run start
 ```
 
 #### Other commands
-Run unit tests: `npm run test:unit` 
+Run unit tests: `npm run test:unit`
 
 Run linters: `npm run lint`
+
+### Notes
+
+- Acquired Bootstrap icons from cdn and imported https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css
+- Created BaseApiService to provide and interface to backend api for new services
+- config.json contains url path

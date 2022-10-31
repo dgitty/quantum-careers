@@ -55,7 +55,7 @@ export abstract class BaseApiService {
      * @param body The payload body that contains the information
      * @returns The json response
      */
-    protected async post(url: string, body: any) {
+    protected async post(url: string, body?: any) {
         try {
             const response = await fetch(url, { body: JSON.stringify(body), headers: this.headers, method: 'POST' });
             return await response.json();

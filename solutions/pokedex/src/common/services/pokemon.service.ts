@@ -1,4 +1,4 @@
-import { PokemonListResponse } from "../models/pokemon-management";
+import { Pokemon, PokemonListResponse } from "../models/pokemon-management";
 import { BaseApiService } from "./base-api.service";
 
 import configData from "../../config.json";
@@ -29,8 +29,8 @@ export class PokemonService extends BaseApiService {
         if (type) { parameters['type'] = type }
 
         let urlParam = Utils.createUrlParameters(parameters);
-        console.log('with param', `${configData.SERVER_URL}/api/rest/pokemon/${urlParam}`);
-        return this.get(`${configData.SERVER_URL}/api/rest/pokemon/${urlParam}`);
+        // console.log('with param', `${configData.SERVER_URL}/pokemon/${urlParam}`);
+        return this.get(`${configData.SERVER_URL}/pokemon/${urlParam}`);
     }
 
     /**
@@ -38,6 +38,16 @@ export class PokemonService extends BaseApiService {
      * @returns A string list of pokemon types
      */
     public getPokemonTypes(): Promise<string[]> {
-        return this.get(`${configData.SERVER_URL}/api/rest/pokemon-types/`);
+        return this.get(`${configData.SERVER_URL}/pokemon-types/`);
+    }
+
+    public postPokemonFavorite(id: string): Promise<Pokemon> {
+        console.log('posting fav',`${configData.SERVER_URL}/pokemon/${id}/favorite`);
+        return this.post(`${configData.SERVER_URL}/pokemon/${id}/favorite`);
+    }
+
+    public postPokemonUnfavorite(id: string): Promise<Pokemon> {
+        console.log('posting unfav',`${configData.SERVER_URL}/pokemon/${id}/unfavorite`);
+        return this.post(`${configData.SERVER_URL}/pokemon/${id}/unfavorite`);
     }
 }
