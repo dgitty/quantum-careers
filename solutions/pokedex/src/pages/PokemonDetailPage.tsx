@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Row, ToggleButton, Col, Card } from "react-bootstrap";
+import { Row, ToggleButton, Col, Card, Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Pokemon } from "../common/models/pokemon-management";
 import { PokemonService } from "../common/services";
@@ -79,19 +79,33 @@ export const PokemonDetailPage = () => {
 
     return (
         // <Loader loading={loading}>
-        <Card id={`card-pokemon-${pokemon?.id}`} style={{ minHeight: '600px' }}>
-            <Card.Body>
-                {renderImage()}
-            </Card.Body>
-            <Card.Header>
-                <Row >
-                    <Col style={{ margin: 1 }}>
-                        <Row>{renderTitle()}</Row>
-                        <Row>{renderText()}</Row>
-                    </Col>
-                    <Col style={{ textAlign: 'right', margin: 1 }}>{renderToggle()}</Col>
-                </Row>
-            </Card.Header>
-        </Card>
+        <Container fluid>
+            <Card id={`card-pokemon-${pokemon?.id}`} style={{ minHeight: '600px' }}>
+                <Card.Body>
+                    {renderImage()}
+                </Card.Body>
+                <Card.Header>
+                    <Row >
+                        <Col style={{ margin: 1 }}>
+                            <Row>{renderTitle()}</Row>
+                            <Row>{renderText()}</Row>
+                        </Col>
+                        <Col style={{ textAlign: 'right', margin: 1 }}>{renderToggle()}</Col>
+                    </Row>
+                    <Row >CP: {pokemon?.maxCP}</Row>
+                    <Row>HP: {pokemon?.maxHP}</Row>
+                    <Row  >
+                        <Col >
+                            <Row>Weight</Row>
+                            <Row>{pokemon?.weight.minimum} - {pokemon?.weight.minimum}</Row>
+                        </Col>
+                        <Col >
+                            <Row >Height</Row>
+                            <Row>{pokemon?.height.minimum} - {pokemon?.height.maximum}</Row>
+                        </Col>
+                    </Row>
+                </Card.Header>
+            </Card>
+        </Container>
     );
 };
