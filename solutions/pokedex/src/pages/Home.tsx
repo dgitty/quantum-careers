@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Row, ButtonGroup, ToggleButton, Form, Col } from "react-bootstrap";
+import { Row, ButtonGroup, ToggleButton, Form, Col, Button, Container } from "react-bootstrap";
 import { PokemonCardComponent } from "../common/components";
 import { PokemonListResponse, PokemonSummary } from "../common/models/pokemon-management";
 import { PokemonService } from "../common/services";
@@ -96,8 +96,8 @@ export const Home = () => {
 
   return (
     // <Loader loading={loading}>
-    <>
-      <Row className="mb-2">
+    <Container>
+      <Row>
         <ButtonGroup>
           {showValues.map((showValue, idx) => (
             <ToggleButton
@@ -115,19 +115,21 @@ export const Home = () => {
           ))}
         </ButtonGroup>
       </Row>
-      <Row className="mb-2">
-        <Col xs={7}>
+      <Row>
+      <Form.Group as={Row} controlId="formPlaintextEmail">
+        <Col>
           <Form.Control type="text" placeholder="Search" onChange={handleSearchText} value={searchText} />
         </Col>
-        <Col>
-          <Form.Select onChange={handleSelectPokemonType} value={selectedPokemonType}>
+        <Col md="auto">
+          <Form.Select style={{ minWidth: 'max-content' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
             <option value=''>Type</option>
             {pokemonTypes.map((pokemonType) => {
               return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
             })}
           </Form.Select>
         </Col>
-        <Col>
+        <Col xs lg="2">
+        <ButtonGroup>
           {views.map((view) => <ToggleButton
             id={`toggle-${view.name}`}
             key={`toggle-${view.name}`}
@@ -135,18 +137,19 @@ export const Home = () => {
             type="checkbox"
             checked={view.value}
             value={String(view.value)}
-            onChange={(change)=>setShowList(change.target.checked)} className={view.className}>
+            onChange={(change) => {setShowList(change.target.checked); console.log(change.target.checked)}} className={view.className}>
           </ToggleButton>
           )}
+          </ButtonGroup>
         </Col>
-
+        </Form.Group>
       </Row>
       <hr />
-      <Row md={showList ? 1: 3}>
+      <Row md={showList ? 1 : 3}>
         {pokemons?.items.map((pokemon) => {
           return <div id={`div-pokemon-card-${pokemon.id}`} className="mb-3" key={pokemon.id}><PokemonCardComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} /></div>;
         })}
       </Row>
-    </>
+    </Container>
   );
 };
