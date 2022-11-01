@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Row, ButtonGroup, ToggleButton, Form, Col, Button } from "react-bootstrap";
+import { Row, ButtonGroup, ToggleButton, Form, Col } from "react-bootstrap";
 import { PokemonCardComponent } from "../common/components";
-import { PokemonListResponse } from "../common/models/pokemon-management";
+import { PokemonListResponse, PokemonSummary } from "../common/models/pokemon-management";
 import { PokemonService } from "../common/services";
 
 export const Home = () => {
@@ -9,10 +9,10 @@ export const Home = () => {
   // const [loading, setLoading] = useState(true);
 
   // Variables associated to user input
-  const [showView, setShowView] = useState('2');
-  const showViews = [
-    { name: 'Grid', value: '1' },
-    { name: 'List', value: '2' },
+  const [showList, setShowList] = useState(false);
+  const views = [
+    { name: 'Grid', className: 'bi bi-list', value: false },
+    { name: 'List', className: 'bi bi-grid-3x2', value: true },
   ];
 
   const [showFavorite, setShowFavorite] = useState<boolean | undefined>();
@@ -39,7 +39,6 @@ export const Home = () => {
         if (mounted) {
           setPokemonTypes(pokemonTypeList);
           setPokemons(pokemonList);
-          // console.log('pokrmonlist', pokemonList);
         }
       })
       .catch((error) => {
@@ -83,11 +82,17 @@ export const Home = () => {
     pokemonService.getPokemons(undefined, undefined, changeSearch, showFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
   }
 
-  const handleShowView = (change: ChangeEvent<HTMLButtonElement>) => {
-    setShowView(change.target.value);
-    console.log('in here');
-    setPokemons(() => pokemons);
-  }
+  /**
+   * Handles likeing or unliking a pokemon
+   * @param pokemon The pokemon
+   */
+  const handleChangeFavorite = (pokemon: PokemonSummary) => {
+    // if isfavorite then post favorite otherwise unfavorite and if showing favorite then update favorite pokemon list
+    pokemon.isFavorite ? pokemonService.postPokemonFavorite(pokemon.id)
+      : pokemonService.postPokemonUnfavorite(pokemon.id).then(() => {
+        showFavorite && pokemonService.getPokemons(undefined, undefined, searchText, showFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
+      });
+  };
 
   return (
     // <Loader loading={loading}>
@@ -123,18 +128,25 @@ export const Home = () => {
           </Form.Select>
         </Col>
         <Col>
-          <Button id="button-list-view" className="bi bi-list" variant="outline-secondary" value='1' onChange={handleShowView} />
-          <Button id="button-grid-view" className="bi bi-grid-3x2" value='2' onChange={handleShowView} />
+          {views.map((view) => <ToggleButton
+            id={`toggle-${view.name}`}
+            key={`toggle-${view.name}`}
+            variant="link"
+            type="checkbox"
+            checked={view.value}
+            value={String(view.value)}
+            onChange={(change)=>setShowList(change.target.checked)} className={view.className}>
+          </ToggleButton>
+          )}
         </Col>
 
       </Row>
       <hr />
-      <Row>
+      <Row md={showList ? 1: 3}>
         {pokemons?.items.map((pokemon) => {
-          return <Col key={`pokemon-${pokemon.id}`}><PokemonCardComponent pokemon={pokemon} pokemonService={pokemonService} /></Col>;
+          return <div id={`div-pokemon-card-${pokemon.id}`} className="mb-3" key={pokemon.id}><PokemonCardComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} /></div>;
         })}
       </Row>
     </>
-    // </Loader>
   );
 };
