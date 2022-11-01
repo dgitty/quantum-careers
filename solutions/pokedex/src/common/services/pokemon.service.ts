@@ -57,4 +57,12 @@ export class PokemonService extends BaseApiService {
     public postPokemonUnfavorite(id: string): Promise<Pokemon> {
         return this.post(`${configData.SERVER_URL}/pokemon/${id}/unfavorite`);
     }
+    /**
+     * Gets the pokemon
+     * @param id The pokemon id
+     * @returns The pokemon
+     */
+    public getPokemon(id: string): Promise<Pokemon> {
+        return this.get(`${configData.SERVER_URL}/pokemon/${id}`);
+    }
 }

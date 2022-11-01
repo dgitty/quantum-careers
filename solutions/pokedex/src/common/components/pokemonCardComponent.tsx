@@ -1,5 +1,6 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import { Row, ToggleButton, Col, Card, Container, } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { PokemonSummary } from "../models/pokemon-management";
 
 type PokemonCardProps = {
@@ -34,7 +35,8 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
      * Renders the pokemon card image
      * @returns Card image
      */
-    const renderImage = () => <Card.Img src={props.pokemon.image} />;
+    const renderImage = () => <Card.Img src={props.pokemon.image} onClick={() => <Link to={props.pokemon.name}></Link>
+    } />;
     /**
      * Renders the pokemon card title
      * @returns Card title
@@ -56,13 +58,14 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
         checked={isFavorite}
         value={String(isFavorite)}
         onChange={handleChangeFavorite} >
-        <span className={isFavorite ? "bi bi-heart-fill" : "bi bi-heart"} style={{ color: 'red',  fontSize:'25px' }} />
+        <span className={isFavorite ? "bi bi-heart-fill" : "bi bi-heart"} style={{ color: 'red', fontSize: '25px' }} />
     </ToggleButton>;
 
     return (
         <>
             {props.showList ?
                 <Container >
+                    <Link to={props.pokemon.name}>linke</Link>
                     <Card id={`card-pokemon-${props.pokemon.id}`}>
                         <Card.Header>
                             <Row>
