@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Row, ButtonGroup, ToggleButton, Form, Col, Button, Container } from "react-bootstrap";
+import { Row, ButtonGroup, ToggleButton, Form, Col, Container } from "react-bootstrap";
 import { PokemonCardComponent } from "../common/components";
 import { PokemonListResponse, PokemonSummary } from "../common/models/pokemon-management";
 import { PokemonService } from "../common/services";
@@ -83,7 +83,7 @@ export const Home = () => {
   }
 
   /**
-   * Handles likeing or unliking a pokemon
+   * Handles favoriting or unfavoriting a pokemon
    * @param pokemon The pokemon
    */
   const handleChangeFavorite = (pokemon: PokemonSummary) => {
@@ -96,7 +96,7 @@ export const Home = () => {
 
   return (
     // <Loader loading={loading}>
-    <Container>
+    <>
       <Row>
         <ButtonGroup>
           {showValues.map((showValue, idx) => (
@@ -116,32 +116,32 @@ export const Home = () => {
         </ButtonGroup>
       </Row>
       <Row>
-      <Form.Group as={Row} controlId="formPlaintextEmail">
-        <Col>
-          <Form.Control type="text" placeholder="Search" onChange={handleSearchText} value={searchText} />
-        </Col>
-        <Col md="auto">
-          <Form.Select style={{ minWidth: 'max-content' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
-            <option value=''>Type</option>
-            {pokemonTypes.map((pokemonType) => {
-              return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
-            })}
-          </Form.Select>
-        </Col>
-        <Col xs lg="2">
-        <ButtonGroup>
-          {views.map((view) => <ToggleButton
-            id={`toggle-${view.name}`}
-            key={`toggle-${view.name}`}
-            variant="link"
-            type="checkbox"
-            checked={view.value}
-            value={String(view.value)}
-            onChange={(change) => {setShowList(change.target.checked); console.log(change.target.checked)}} className={view.className}>
-          </ToggleButton>
-          )}
-          </ButtonGroup>
-        </Col>
+        <Form.Group as={Row} controlId="formPlaintextEmail">
+          <Col>
+            <Form.Control type="text" placeholder="Search" onChange={handleSearchText} value={searchText} />
+          </Col>
+          <Col md="auto">
+            <Form.Select style={{ minWidth: 'max-content' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
+              <option value=''>Type</option>
+              {pokemonTypes.map((pokemonType) => {
+                return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
+              })}
+            </Form.Select>
+          </Col>
+          <Col xs lg="2">
+            <ButtonGroup>
+              {views.map((view) => <ToggleButton
+                id={`toggle-${view.name}`}
+                key={`toggle-${view.name}`}
+                variant="link"
+                type="checkbox"
+                checked={view.value}
+                value={String(view.value)}
+                onChange={(change) => setShowList(change.target.checked)} className={view.className}>
+              </ToggleButton>
+              )}
+            </ButtonGroup>
+          </Col>
         </Form.Group>
       </Row>
       <hr />
@@ -150,6 +150,6 @@ export const Home = () => {
           return <div id={`div-pokemon-card-${pokemon.id}`} className="mb-3" key={pokemon.id}><PokemonCardComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} /></div>;
         })}
       </Row>
-    </Container>
+    </>
   );
 };

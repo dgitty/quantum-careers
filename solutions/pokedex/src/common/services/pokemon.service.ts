@@ -22,14 +22,13 @@ export class PokemonService extends BaseApiService {
      */
     public getPokemons(limit?: number, offset?: number, search?: string, isFavorite?: boolean, type?: string): Promise<PokemonListResponse> {
         let parameters: { [id: string]: any; } = {};
-        if (limit) { parameters['limit'] = limit }
-        if (offset) { parameters['offset'] = offset }
-        if (search) { parameters['search'] = search }
-        if (isFavorite) { parameters['isFavorite'] = isFavorite }
-        if (type) { parameters['type'] = type }
+        if (limit) parameters['limit'] = limit;
+        if (offset) parameters['offset'] = offset;
+        if (search) parameters['search'] = search;
+        if (isFavorite) parameters['isFavorite'] = isFavorite;
+        if (type) parameters['type'] = type;
 
         let urlParam = Utils.createUrlParameters(parameters);
-        // console.log('with param', `${configData.SERVER_URL}/pokemon/${urlParam}`);
         return this.get(`${configData.SERVER_URL}/pokemon/${urlParam}`);
     }
 
@@ -41,13 +40,21 @@ export class PokemonService extends BaseApiService {
         return this.get(`${configData.SERVER_URL}/pokemon-types/`);
     }
 
+    /**
+     * Post the favorited pokemon
+     * @param id The pokemon id
+     * @returns The pokemon
+     */
     public postPokemonFavorite(id: string): Promise<Pokemon> {
-        console.log('posting fav',`${configData.SERVER_URL}/pokemon/${id}/favorite`);
         return this.post(`${configData.SERVER_URL}/pokemon/${id}/favorite`);
     }
 
+    /**
+     * Post the unfavorited pokemon
+     * @param id The pokemon id
+     * @returns The pokemon
+     */
     public postPokemonUnfavorite(id: string): Promise<Pokemon> {
-        console.log('posting unfav',`${configData.SERVER_URL}/pokemon/${id}/unfavorite`);
         return this.post(`${configData.SERVER_URL}/pokemon/${id}/unfavorite`);
     }
 }

@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useState } from "react";
-import { Row, ToggleButton, Col, Card, } from "react-bootstrap";
+import { Row, ToggleButton, Col, Card, Container, } from "react-bootstrap";
 import { PokemonSummary } from "../models/pokemon-management";
 
 type PokemonCardProps = {
@@ -30,65 +30,67 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
         // changeFav === false && elem?.remove();// elem?.parentNode?.removeChild(elem!);
     }, [props]);
 
+    /**
+     * Renders the pokemon card image
+     * @returns Card image
+     */
+    const renderImage = () => <Card.Img src={props.pokemon.image} />;
+    /**
+     * Renders the pokemon card title
+     * @returns Card title
+     */
+    const renderTitle = () => <Card.Title>{props.pokemon.name}</Card.Title>;
+    /**
+     * Renders the pokemon card text
+     * @returns Card text
+     */
+    const renderText = () => <Card.Text>{props.pokemon.types.join(', ')}</Card.Text>;
+    /**
+     * Renders the pokemon favorite button
+     * @returns Toggle button
+     */
+    const renderToggle = () => <ToggleButton
+        id={`toggle-is-favorite-${props.pokemon.id}`}
+        variant="link"
+        type="checkbox"
+        checked={isFavorite}
+        value={String(isFavorite)}
+        onChange={handleChangeFavorite} >
+        <span className={isFavorite ? "bi bi-heart-fill" : "bi bi-heart"} style={{ color: 'red',  fontSize:'25px' }} />
+    </ToggleButton>;
+
     return (
         <>
             {props.showList ?
-                <Card id={`card-pokemon-${props.pokemon.id}`}>
+                <Container >
+                    <Card id={`card-pokemon-${props.pokemon.id}`}>
+                        <Card.Header>
+                            <Row>
+                                <Col>{renderImage()}</Col>
+                                <Col style={{ margin: 1 }}>
+                                    <Row>{renderTitle()}</Row>
+                                    <Row>{renderText()}</Row>
+                                </Col>
+                                <Col style={{ textAlign: 'right', margin: 1 }}>{renderToggle()}</Col>
+                            </Row>
+                        </Card.Header>
+                    </Card>
+                </Container>
+                : <Card id={`card-pokemon-${props.pokemon.id}`} style={{ minHeight: '600px' }}>
+                    <Card.Body>
+                        {renderImage()}
+                    </Card.Body>
                     <Card.Header>
-                        <Row>
-                            <Col>          <Card.Img variant="top" src={props.pokemon.image} />
+                        <Row >
+                            <Col style={{ margin: 1 }}>
+                                <Row>{renderTitle()}</Row>
+                                <Row>{renderText()}</Row>
                             </Col>
-                            <Col xs={10}>
-                                <Row><Card.Title>{props.pokemon.name}</Card.Title>
-                                </Row>
-                                <Row><Card.Text>
-                                    {props.pokemon.types.join(', ')}
-                                </Card.Text></Row>
-                            </Col>
-                            <Col style={{ textAlign: 'right' }}>
-                                <ToggleButton
-                                    id={`toggle-is-favorite-${props.pokemon.id}`}
-                                    variant="link"
-                                    type="checkbox"
-                                    checked={isFavorite}
-                                    value={String(isFavorite)}
-                                    onChange={handleChangeFavorite} >
-                                    <span className={isFavorite ? "bi bi-heart-fill" : "bi bi-heart"} style={{ color: 'red' }} />
-                                </ToggleButton>
-                            </Col>
+                            <Col style={{ textAlign: 'right', margin: 1 }}>{renderToggle()}</Col>
                         </Row>
                     </Card.Header>
                 </Card>
-                : <Card id={`card-pokemon-${props.pokemon.id}`}>
-                    <Card.Body>
-                        <Card.Img variant="top" src={props.pokemon.image} />
-                    </Card.Body>
-                    <Card.Header>
-                        <Row>
-                            <Col xs={10}>
-                                <Row>
-                                    <Card.Title>{props.pokemon.name}</Card.Title>
-                                </Row>
-                                <Row>
-                                    <Card.Text>
-                                        {props.pokemon.types.join(', ')}
-                                    </Card.Text>
-                                </Row>
-                            </Col>
-                            <Col style={{ textAlign: 'right' }}>
-                                <ToggleButton
-                                    id={`toggle-is-favorite-${props.pokemon.id}`}
-                                    variant="link"
-                                    type="checkbox"
-                                    checked={isFavorite}
-                                    value={String(isFavorite)}
-                                    onChange={handleChangeFavorite} >
-                                    <span className={isFavorite ? "bi bi-heart-fill" : "bi bi-heart"} style={{ color: 'red' }} />
-                                </ToggleButton>
-                            </Col>
-                        </Row>
-                    </Card.Header>
-                </Card>}
+            }
         </>
     );
 };
