@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import { Row, ToggleButton, Col, Card, Container, } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PokemonSummary } from "../models/pokemon-management";
 
 type PokemonCardProps = {
@@ -16,7 +16,7 @@ type PokemonCardProps = {
  */
 export const PokemonCardComponent = (props: PokemonCardProps) => {
     const [isFavorite, setIsFavorite] = useState<boolean>(props.pokemon.isFavorite);
-
+    const navigate = useNavigate();
     /**
      * Handles liking or unliking the pokemon
      * @param change The Changed input
@@ -32,11 +32,10 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
     }, [props]);
 
     /**
-     * Renders the pokemon card image
+     * Renders the pokemon card image and navigates to pokemon card on click.
      * @returns Card image
      */
-    const renderImage = () => <Card.Img src={props.pokemon.image} onClick={() => <Link to={props.pokemon.name}></Link>
-    } />;
+    const renderImage = () => <Card.Img src={props.pokemon.image} onClick={() => navigate(`${props.pokemon.name}`)} />;
     /**
      * Renders the pokemon card title
      * @returns Card title
@@ -65,7 +64,6 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
         <>
             {props.showList ?
                 <Container >
-                    <Link to={props.pokemon.name}>linke</Link>
                     <Card id={`card-pokemon-${props.pokemon.id}`}>
                         <Card.Header>
                             <Row>
@@ -79,7 +77,7 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
                         </Card.Header>
                     </Card>
                 </Container>
-                : <Card id={`card-pokemon-${props.pokemon.id}`} style={{ minHeight: '600px' }}>
+                : <Card id={`card-pokemon-${props.pokemon.id}`}>
                     <Card.Body>
                         {renderImage()}
                     </Card.Body>

@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Row, ToggleButton, Col, Card, Container } from "react-bootstrap";
+import { Row, ToggleButton, Col, Card, Container, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Pokemon } from "../common/models/pokemon-management";
 import { PokemonService } from "../common/services";
@@ -41,7 +41,7 @@ export const PokemonDetailPage = () => {
      * Renders the pokemon card title
      * @returns Card title
      */
-    const renderTitle = () => <Card.Title>{pokemon?.name}</Card.Title>;
+    const renderTitle = () => <Card.Title style={{ fontWeight: 'bold' }}>{pokemon?.name}</Card.Title>;
     /**
      * Renders the pokemon card text
      * @returns Card text
@@ -49,9 +49,9 @@ export const PokemonDetailPage = () => {
     const renderText = () => <Card.Text>{pokemon?.types.join(', ')}</Card.Text>;
 
     /**
- * Handles liking or unliking the pokemon
- * @param change The Changed input
- */
+     * Handles liking or unliking the pokemon
+     * @param change The Changed input
+     */
     const handleChangeFavorite = (change: ChangeEvent<HTMLInputElement>) => {
         let changeFav = change.target.checked;
         setIsFavorite(changeFav);
@@ -67,7 +67,7 @@ export const PokemonDetailPage = () => {
      * Renders the pokemon favorite button
      * @returns Toggle button
      */
-    const renderToggle = () => <ToggleButton
+    const renderFavorite = () => <ToggleButton
         id={`toggle-is-favorite-${pokemon?.id}`}
         variant="link"
         type="checkbox"
@@ -77,31 +77,71 @@ export const PokemonDetailPage = () => {
         <span className={isFavorite ? "bi bi-heart-fill" : "bi bi-heart"} style={{ color: 'red', fontSize: '25px' }} />
     </ToggleButton>;
 
+    /**
+     * Renders the pokemon sound button and plays their sound on click
+     * @returns Sound Button
+     */
+    const renderSound = () => <Button
+        id={` button-sound-${pokemon?.id}`}
+        variant="link"
+        onClick={() => new Audio(`${pokemon?.sound}`).play()}
+    >
+        <span className="bi bi-volume-up-fill" style={{ color: 'green', fontSize: '25px' }} />
+    </Button>;
+
     return (
         // <Loader loading={loading}>
-        <Container fluid>
-            <Card id={`card-pokemon-${pokemon?.id}`} style={{ minHeight: '600px' }}>
+        <Container fluid >
+            <Card id={`card-pokemon-${pokemon?.id}`} >
                 <Card.Body>
-                    {renderImage()}
-                </Card.Body>
-                <Card.Header>
-                    <Row >
-                        <Col style={{ margin: 1 }}>
-                            <Row>{renderTitle()}</Row>
-                            <Row>{renderText()}</Row>
-                        </Col>
-                        <Col style={{ textAlign: 'right', margin: 1 }}>{renderToggle()}</Col>
+                    <Row>
+                        <Col xs={2} style={{ padding: 0, display: 'flex', alignItems: 'flex-end' }}>{renderSound()}</Col>
+                        <Col xs={10}>{renderImage()}</Col>
                     </Row>
-                    <Row >CP: {pokemon?.maxCP}</Row>
-                    <Row>HP: {pokemon?.maxHP}</Row>
+                </Card.Body>
+                <Card.Header key='card-header-main'>
                     <Row  >
-                        <Col >
-                            <Row>Weight</Row>
-                            <Row>{pokemon?.weight.minimum} - {pokemon?.weight.minimum}</Row>
+                        <Col xs={10} style={{ padding: '0px' }}>
+                            <Row>{renderTitle()}</Row>
+                            <Row>{renderText()}</Row>   </Col>
+                        <Col style={{ textAlign: 'right' }}>
+                            <Row>{renderFavorite()}</Row>
                         </Col>
-                        <Col >
-                            <Row >Height</Row>
-                            <Row>{pokemon?.height.minimum} - {pokemon?.height.maximum}</Row>
+                    </Row>
+                    <Row >
+                        <Col xs={9} style={{ paddingTop: 0, paddingLeft: 0, paddingRight: 5 }}><hr style={{ borderRadius: '25px', border: 'none', height: '10px', backgroundColor: 'purple' }} /></Col>
+                        <Col style={{ fontWeight: 'bold', padding: '0px' }}>CP: {pokemon?.maxCP}</Col>
+                    </Row>
+                    <Row>
+                        <Col xs={9} style={{ paddingTop: 0, paddingLeft: 0, paddingRight: 5 }}><hr style={{ borderRadius: '25px', border: 'none', height: '10px', backgroundColor: 'green' }} /></Col>
+                        <Col style={{ fontWeight: 'bold', padding: '0px' }}>HP: {pokemon?.maxHP}</Col>
+                    </Row>
+                </Card.Header>
+                <Card.Header key='card-header-alt'>
+                    <Row>
+                        <Col>
+                            <Row  >
+                                <Col style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                                    Weight
+                                </Col>
+                            </Row>
+                            <Row  >
+                                <Col style={{ textAlign: 'center' }}>
+                                    {pokemon?.weight.minimum} - {pokemon?.weight.minimum}
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col>
+                            <Row  >
+                                <Col style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                                    Height
+                                </Col>
+                            </Row>
+                            <Row  >
+                                <Col style={{ textAlign: 'center' }}>
+                                    {pokemon?.height.minimum} - {pokemon?.height.maximum}
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
                 </Card.Header>
