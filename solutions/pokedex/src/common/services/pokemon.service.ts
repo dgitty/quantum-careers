@@ -1,8 +1,8 @@
-import { Pokemon, PokemonListResponse } from "../models/pokemon-management";
-import { BaseApiService } from "./base-api.service";
+import { Pokemon, PokemonListResponse } from '../models/pokemon-management';
+import { BaseApiService } from './base-api.service';
 
-import configData from "../../config.json";
-import { Utils } from "../utils";
+import configData from '../../config.json';
+import { Utils } from '../utils';
 
 /**
  * PokemonService extends BaseAPIService and is an interface to the Pokemon API.

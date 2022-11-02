@@ -1,7 +1,7 @@
-import { ChangeEvent, useCallback, useState } from "react";
-import { Row, ToggleButton, Col, Card, Container, } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import { PokemonSummary } from "../models/pokemon-management";
+import { ChangeEvent, useCallback, useState } from 'react';
+import { Row, ToggleButton, Col, Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { PokemonSummary } from '../models/pokemon-management';
 
 type PokemonCardProps = {
     pokemon: PokemonSummary;
@@ -14,7 +14,7 @@ type PokemonCardProps = {
  * @param props PokemonCardProps
  * @returns A pokemon card summary
  */
-export const PokemonCardComponent = (props: PokemonCardProps) => {
+export const PokemonSummaryComponent = (props: PokemonCardProps) => {
     const [isFavorite, setIsFavorite] = useState<boolean>(props.pokemon.isFavorite);
     const navigate = useNavigate();
     /**
@@ -26,9 +26,6 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
         setIsFavorite(changeFav);
         props.pokemon.isFavorite = changeFav;
         props.handleFavorite(props.pokemon);
-        // changeFav !==true && document.getElementById(`card-pokemon-${props.pokemon.id}`)?.remove();
-        // var elem = document.getElementById(`card-pokemon-${props.pokemon.id}`);
-        // changeFav === false && elem?.remove();// elem?.parentNode?.removeChild(elem!);
     }, [props]);
 
     /**
@@ -50,48 +47,49 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
      * Renders the pokemon favorite button
      * @returns Toggle button
      */
-    const renderToggle = () => <ToggleButton
+
+    const renderFavorite = () => <ToggleButton
         id={`toggle-is-favorite-${props.pokemon.id}`}
-        variant="link"
-        type="checkbox"
+        variant='link'
+        type='checkbox'
         checked={isFavorite}
         value={String(isFavorite)}
         onChange={handleChangeFavorite} >
-        <span className={isFavorite ? "bi bi-heart-fill" : "bi bi-heart"} style={{ color: 'red', fontSize: '25px' }} />
+        <span className={isFavorite ? 'bi bi-heart-fill' : 'bi bi-heart'} style={{ color: 'red', fontSize: '25px' }} />
     </ToggleButton>;
 
     return (
         <>
-            {props.showList ?
-                <Container >
-                    <Card id={`card-pokemon-${props.pokemon.id}`}>
-                        <Card.Header>
-                            <Row>
-                                <Col>{renderImage()}</Col>
-                                <Col style={{ margin: 1 }}>
-                                    <Row>{renderTitle()}</Row>
-                                    <Row>{renderText()}</Row>
-                                </Col>
-                                <Col style={{ textAlign: 'right', margin: 1 }}>{renderToggle()}</Col>
-                            </Row>
-                        </Card.Header>
-                    </Card>
-                </Container>
+            {props.showList ? <Card id={`card-pokemon-${props.pokemon.id}`} >
+                <Card.Header>
+                    <Row>
+                        <Col>
+                            {renderImage()}
+                        </Col>
+                        <Col style={{ margin: 1 }}>
+                            <Row>{renderTitle()}</Row>
+                            <Row>{renderText()}</Row>
+                        </Col>
+                        <Col style={{ textAlign: 'right', margin: 1 }}>{renderFavorite()}</Col>
+                    </Row>
+                </Card.Header>
+            </Card>
                 : <Card id={`card-pokemon-${props.pokemon.id}`}>
                     <Card.Body>
                         {renderImage()}
                     </Card.Body>
                     <Card.Header>
-                        <Row >
-                            <Col style={{ margin: 1 }}>
+                        <Row  >
+                            <Col xs={10} style={{ padding: '0px' }}>
                                 <Row>{renderTitle()}</Row>
                                 <Row>{renderText()}</Row>
                             </Col>
-                            <Col style={{ textAlign: 'right', margin: 1 }}>{renderToggle()}</Col>
+                            <Col xs={2} style={{ textAlign: 'right' }}>
+                                <Row>{renderFavorite()}</Row>
+                            </Col>
                         </Row>
                     </Card.Header>
-                </Card>
-            }
+                </Card>}
         </>
     );
 };

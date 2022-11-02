@@ -1,4 +1,4 @@
-import { HttpStatus, ValidationErrors } from "../models";
+import { HttpStatus, ValidationErrors } from '../models';
 
 /**
  * HttpError provides http error details

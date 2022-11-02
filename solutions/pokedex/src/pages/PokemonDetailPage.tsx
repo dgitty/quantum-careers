@@ -1,8 +1,8 @@
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Row, ToggleButton, Col, Card, Container, Button } from "react-bootstrap";
-import { useParams } from "react-router-dom";
-import { Pokemon } from "../common/models/pokemon-management";
-import { PokemonService } from "../common/services";
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { Row, ToggleButton, Col, Card, Container, Button } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import { Pokemon } from '../common/models/pokemon-management';
+import { PokemonService } from '../common/services';
 
 export const PokemonDetailPage = () => {
     // Variables
@@ -31,7 +31,7 @@ export const PokemonDetailPage = () => {
 
             });
         // return () => mounted = false;
-    }, [pokemonService])
+    }, [pokemonService, name])
     /**
         * Renders the pokemon card image
         * @returns Card image
@@ -69,12 +69,12 @@ export const PokemonDetailPage = () => {
      */
     const renderFavorite = () => <ToggleButton
         id={`toggle-is-favorite-${pokemon?.id}`}
-        variant="link"
-        type="checkbox"
+        variant='link'
+        type='checkbox'
         checked={isFavorite}
         value={String(isFavorite)}
         onChange={handleChangeFavorite} >
-        <span className={isFavorite ? "bi bi-heart-fill" : "bi bi-heart"} style={{ color: 'red', fontSize: '25px' }} />
+        <span className={isFavorite ? 'bi bi-heart-fill' : 'bi bi-heart'} style={{ color: 'red', fontSize: '25px' }} />
     </ToggleButton>;
 
     /**
@@ -83,10 +83,10 @@ export const PokemonDetailPage = () => {
      */
     const renderSound = () => <Button
         id={` button-sound-${pokemon?.id}`}
-        variant="link"
+        variant='link'
         onClick={() => new Audio(`${pokemon?.sound}`).play()}
     >
-        <span className="bi bi-volume-up-fill" style={{ color: 'green', fontSize: '25px' }} />
+        <span className='bi bi-volume-up-fill' style={{ color: 'green', fontSize: '25px' }} />
     </Button>;
 
     return (
@@ -103,8 +103,9 @@ export const PokemonDetailPage = () => {
                     <Row  >
                         <Col xs={10} style={{ padding: '0px' }}>
                             <Row>{renderTitle()}</Row>
-                            <Row>{renderText()}</Row>   </Col>
-                        <Col style={{ textAlign: 'right' }}>
+                            <Row>{renderText()}</Row>
+                        </Col>
+                        <Col xs={2} style={{ textAlign: 'right' }}>
                             <Row>{renderFavorite()}</Row>
                         </Col>
                     </Row>
@@ -120,24 +121,24 @@ export const PokemonDetailPage = () => {
                 <Card.Header key='card-header-alt'>
                     <Row>
                         <Col>
-                            <Row  >
+                            <Row>
                                 <Col style={{ textAlign: 'center', fontWeight: 'bold' }}>
                                     Weight
                                 </Col>
                             </Row>
-                            <Row  >
+                            <Row>
                                 <Col style={{ textAlign: 'center' }}>
                                     {pokemon?.weight.minimum} - {pokemon?.weight.minimum}
                                 </Col>
                             </Row>
                         </Col>
                         <Col>
-                            <Row  >
+                            <Row>
                                 <Col style={{ textAlign: 'center', fontWeight: 'bold' }}>
                                     Height
                                 </Col>
                             </Row>
-                            <Row  >
+                            <Row>
                                 <Col style={{ textAlign: 'center' }}>
                                     {pokemon?.height.minimum} - {pokemon?.height.maximum}
                                 </Col>

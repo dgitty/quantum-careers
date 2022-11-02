@@ -1,5 +1,5 @@
-import { HttpError } from "../errors/http-error";
-import { NetworkError } from "../errors/network-error";
+import { HttpError } from '../errors/http-error';
+import { NetworkError } from '../errors/network-error';
 
 /**
  * Handles error by throwing http error or throwing network error.

@@ -1,4 +1,4 @@
-import { PokemonSummary } from "./pokemon-summary";
+import { PokemonSummary } from './pokemon-summary';
 
 /**
  * Pokemon contains details of the Pokemon

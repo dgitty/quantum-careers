@@ -1,1 +1,1 @@
-export * from './pokemonCardComponent';
+export * from './pokemonSummaryComponent';
