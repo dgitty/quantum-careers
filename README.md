@@ -6,6 +6,9 @@ Hi! I'm Dalina and I'm on a mission to complete this challenge!
 
 ### Frontend Challenge
 
+challenge: `<project_main/challenges/frontend>`
+solution: `<project_main>/solutions/pokemon`
+
 #### Run the app
 
 ```bash
@@ -26,4 +29,10 @@ Run linters: `npm run lint`
 
 - Acquired Bootstrap icons from cdn and imported https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css
 - Created BaseApiService to provide and interface to backend api for new services
-- config.json contains url path
+- config.json contains url path and is intended for any configurable items
+- Used infinite scrolling for a seamless look and feel
+
+### Resources
+- [Bootstrap Icons](https://icons.getbootstrap.com/)
+- [React](https://reactjs.org/)
+- [Typescript](https://www.typescriptlang.org/)
