@@ -60,7 +60,7 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
 
     return (
         <>
-            {props.showList ? <Card id={`card-pokemon-${props.pokemon.id}`} >
+            {props.showList ? <Card id={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: '0px'}} >
                 <Card.Header>
                     <Row>
                         <Col>
@@ -74,7 +74,9 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
                     </Row>
                 </Card.Header>
             </Card>
-                : <Card id={`card-pokemon-${props.pokemon.id}`}>
+                : <Card id={`card-pokemon-${props.pokemon.id}`}
+                    style={{ borderRadius: '0px' }}
+                >
                     <Card.Body>
                         {renderImage()}
                     </Card.Body>

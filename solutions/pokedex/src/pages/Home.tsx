@@ -3,15 +3,17 @@ import { Row, ButtonGroup, ToggleButton, Form, Col, Container } from 'react-boot
 import { PokemonSummaryComponent } from '../common/components';
 import { PokemonListResponse, PokemonSummary } from '../common/models/pokemon-management';
 import { PokemonService } from '../common/services';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export const Home = () => {
   // Variables
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+
   // Variables associated to user input
   const [showList, setShowList] = useState(false);
   const views = [
     { name: 'Grid', className: 'bi bi-list', value: false },
-    { name: 'List', className: 'bi bi-grid-3x2', value: true },
+    { name: 'List', className: 'bi bi-grid-3x2-gap-fill', value: true },
   ];
 
   const [showFavorite, setShowFavorite] = useState<boolean | undefined>();
@@ -26,29 +28,42 @@ export const Home = () => {
   // Variables associated to api
   const [pokemonTypes, setPokemonTypes] = useState<string[]>([]);
   const [pokemons, setPokemons] = useState<PokemonListResponse>();
-
+  const LIMIT = 20; // denotes number of pokemons to retrieve from api
+  const [offset, setOffset] = useState(0); // offset number at which to begin retrieving pokemons
 
   // Services
   const pokemonService = useMemo(() => { return new PokemonService(); }, []);
 
-  useEffect(() => {
+  const fetchData = async () => {
     let mounted = true;
-    Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons()])
+
+    Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons(LIMIT, offset)])
       .then(([pokemonTypeList, pokemonList]) => {
         if (mounted) {
           setPokemonTypes(pokemonTypeList);
-          setPokemons(pokemonList);
+
+          if (pokemons) {
+            var tempPokemons: PokemonListResponse = { ...pokemons! };
+            tempPokemons.items = tempPokemons.items.concat(pokemonList.items);
+            setPokemons(tempPokemons);
+          }
+          else {
+            setPokemons(pokemonList);
+          }
+          setOffset(offset + LIMIT);
+          setLoading(false);
         }
       })
       .catch((error) => {
-        if (mounted) {
-          // setLoading(false);
-        }
+        if (mounted) { setLoading(false); }
         console.error(error);
-
       });
-    // return () => mounted = false;
-  }, [pokemonService])
+    return () => { mounted = false; }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [])
 
   /**
    * Handles showing all or favorite pokemons
@@ -58,7 +73,7 @@ export const Home = () => {
     let changeShowFavorite = change.currentTarget.value === 'true' ? true : undefined;
     setShowFavorite(changeShowFavorite);
     // Show favorites otherwise show all
-    pokemonService.getPokemons(undefined, undefined, searchText, changeShowFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
+    pokemonService.getPokemons(LIMIT, undefined, searchText, changeShowFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
   }
 
   /**
@@ -68,7 +83,7 @@ export const Home = () => {
   const handleSelectPokemonType = (change: ChangeEvent<HTMLSelectElement>) => {
     let changeType = change.target.value
     setSelectedPokemonType(changeType);
-    pokemonService.getPokemons(undefined, undefined, searchText, showFavorite, changeType).then((pokemonList) => setPokemons(pokemonList));
+    pokemonService.getPokemons(LIMIT, undefined, searchText, showFavorite, changeType).then((pokemonList) => setPokemons(pokemonList));
   }
 
   /**
@@ -78,7 +93,7 @@ export const Home = () => {
   const handleSearchText = (change: ChangeEvent<HTMLInputElement>) => {
     let changeSearch = change.target.value
     setSearchText(changeSearch);
-    pokemonService.getPokemons(undefined, undefined, changeSearch, showFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
+    pokemonService.getPokemons(LIMIT, undefined, changeSearch, showFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
   }
 
   /**
@@ -89,17 +104,17 @@ export const Home = () => {
     // if isfavorite then post favorite otherwise unfavorite and if showing favorite then update favorite pokemon list
     pokemon.isFavorite ? pokemonService.postPokemonFavorite(pokemon.id)
       : pokemonService.postPokemonUnfavorite(pokemon.id).then(() => {
-        showFavorite && pokemonService.getPokemons(undefined, undefined, searchText, showFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
+        showFavorite && pokemonService.getPokemons(LIMIT, undefined, searchText, showFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
       });
   };
 
   return (
-    // <Loader loading={loading}>
-    <Container fluid >
-      <Row>
-        <ButtonGroup >
+    <>
+    <Container fluid>
+      <Row className='mb-2' style={{paddingTop:5}}>
+        <ButtonGroup  >
           {showValues.map((showValue, idx) => (
-            <ToggleButton
+            <ToggleButton style={{ borderRadius: '0px', color: '#04AA6D' }}
               key={idx}
               id={`show-${idx}`}
               type='radio'
@@ -114,21 +129,21 @@ export const Home = () => {
           ))}
         </ButtonGroup>
       </Row>
-      <Row >
-        <Col xs={6} lg md style={{ paddingRight: 1 }}>
-          <Form.Control type='text' placeholder='Search' onChange={handleSearchText} value={searchText} />
+      <Row style={{ padding: 0 }}>
+        <Col>
+          <Form.Control style={{ borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} type='text' placeholder='Search' onChange={handleSearchText} value={searchText} />
         </Col>
-        <Col xs={'auto'} style={{ paddingRight: 1 }}>
-          <Form.Select style={{ minWidth: 'max-content' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
+        <Col xs={'auto'}>
+          <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
             <option value=''>Type</option>
             {pokemonTypes.map((pokemonType) => {
               return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
             })}
           </Form.Select>
         </Col>
-        <Col xs={'auto'} style={{paddingRight: 10, textAlign: 'center'}} >
+        <Col xs={'auto'}  >
           <ButtonGroup >
-            {views.map((view) => <ToggleButton style={{padding: 0}}
+            {views.map((view) => <ToggleButton style={{ padding: 0, fontSize: '25px', color: '#04AA6D' }}
               id={`toggle-${view.name}`}
               key={`toggle-${view.name}`}
               variant='link'
@@ -141,12 +156,25 @@ export const Home = () => {
           </ButtonGroup>
         </Col>
       </Row>
-      <hr />
-      <Row xs={showList ? 1 : 3} >
-        {pokemons?.items.map((pokemon) => {
-          return <div id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={pokemon.id}><PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList}></PokemonSummaryComponent></div>;
-        })}
-      </Row>
-    </Container>
+      </Container>
+      <hr style={{ padding: 0, border: 'none', height: '3px', backgroundColor: 'grey' }} />
+      <Container fluid>
+
+      <InfiniteScroll
+        dataLength={pokemons?.items.length! || 0}
+        next={fetchData}
+        hasMore={Boolean(pokemons?.items.length! !== pokemons?.count!)}
+        loader={<h4>Loading...</h4>}
+      >
+        <Row xs={showList ? 1 : 3} >
+          {pokemons?.items.map((pokemon) => {
+            return <div
+              id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={pokemon.id}><PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList}></PokemonSummaryComponent></div>;
+          })}
+        </Row>
+      </InfiniteScroll>
+      </Container>
+    </>
+
   );
 };
