@@ -31,6 +31,7 @@ Run linters: `npm run lint`
 - Created BaseApiService to provide and interface to backend api for new services
 - config.json contains url path and is intended for any configurable items
 - Used infinite scrolling for a seamless look and feel
+- Created a base Pokemon Summary Component to be easily reused
 
 ### Resources
 - [Bootstrap Icons](https://icons.getbootstrap.com/)

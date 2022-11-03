@@ -110,71 +110,69 @@ export const Home = () => {
 
   return (
     <>
-    <Container fluid>
-      <Row className='mb-2' style={{paddingTop:5}}>
-        <ButtonGroup  >
-          {showValues.map((showValue, idx) => (
-            <ToggleButton style={{ borderRadius: '0px', color: '#04AA6D' }}
-              key={idx}
-              id={`show-${idx}`}
-              type='radio'
-              variant={'outline-success'}
-              name='radio'
-              value={String(showValue.value)}
-              checked={showFavorite === showValue.value}
-              onChange={handleShow}
-            >
-              {showValue.name}
-            </ToggleButton>
-          ))}
-        </ButtonGroup>
-      </Row>
-      <Row style={{ padding: 0 }}>
-        <Col>
-          <Form.Control style={{ borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} type='text' placeholder='Search' onChange={handleSearchText} value={searchText} />
-        </Col>
-        <Col xs={'auto'}>
-          <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
-            <option value=''>Type</option>
-            {pokemonTypes.map((pokemonType) => {
-              return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
-            })}
-          </Form.Select>
-        </Col>
-        <Col xs={'auto'}  >
-          <ButtonGroup >
-            {views.map((view) => <ToggleButton style={{ padding: 0, fontSize: '25px', color: '#04AA6D' }}
-              id={`toggle-${view.name}`}
-              key={`toggle-${view.name}`}
-              variant='link'
-              type='checkbox'
-              checked={view.value}
-              value={String(view.value)}
-              onChange={(change) => setShowList(change.target.checked)} className={view.className}>
-            </ToggleButton>
-            )}
+      <Container fluid>
+        <Row className='mb-2' style={{ paddingTop: 5 }}>
+          <ButtonGroup>
+            {showValues.map((showValue, idx) => (
+              <ToggleButton style={{ borderRadius: '0px', color: '#04AA6D' }}
+                key={idx}
+                id={`show-${idx}`}
+                type='radio'
+                variant={'outline-success'}
+                name='radio'
+                value={String(showValue.value)}
+                checked={showFavorite === showValue.value}
+                onChange={handleShow}
+              >
+                {showValue.name}
+              </ToggleButton>
+            ))}
           </ButtonGroup>
-        </Col>
-      </Row>
+        </Row>
+        <Row style={{ padding: 0 }}>
+          <Col>
+            <Form.Control style={{ borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} type='text' placeholder='Search' onChange={handleSearchText} value={searchText} />
+          </Col>
+          <Col xs={'auto'}>
+            <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
+              <option value=''>Type</option>
+              {pokemonTypes.map((pokemonType) => {
+                return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
+              })}
+            </Form.Select>
+          </Col>
+          <Col xs={'auto'}  >
+            <ButtonGroup >
+              {views.map((view) => <ToggleButton style={{ padding: 0, fontSize: '25px', color: '#04AA6D' }}
+                id={`toggle-${view.name}`}
+                key={`toggle-${view.name}`}
+                variant='link'
+                type='checkbox'
+                checked={view.value}
+                value={String(view.value)}
+                onChange={(change) => setShowList(change.target.checked)} className={view.className}>
+              </ToggleButton>
+              )}
+            </ButtonGroup>
+          </Col>
+        </Row>
       </Container>
       <hr style={{ padding: 0, border: 'none', height: '3px', backgroundColor: 'grey' }} />
       <Container fluid>
-
-      <InfiniteScroll
-        dataLength={pokemons?.items.length! || 0}
-        next={fetchData}
-        hasMore={Boolean(pokemons?.items.length! !== pokemons?.count!)}
-        loader={<h4>Loading...</h4>}
-      >
-        <Row xs={showList ? 1 : 3} >
-          {pokemons?.items.map((pokemon) => {
-            return <div
-              id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={pokemon.id}><PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList}></PokemonSummaryComponent></div>;
-          })}
-        </Row>
-      </InfiniteScroll>
+        <InfiniteScroll
+          dataLength={pokemons?.items.length! || 0}
+          next={fetchData}
+          hasMore={Boolean(pokemons?.items.length! !== pokemons?.count!)}
+          loader={<h4>Loading...</h4>}
+        >
+          <Row xs={showList ? 1 : 3} >
+            {pokemons?.items.map((pokemon) => {
+              return <div
+                id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={pokemon.id}><PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'></PokemonSummaryComponent></div>;
+            })}
+          </Row>
+        </InfiniteScroll>
       </Container>
     </>
-
   );
 };
