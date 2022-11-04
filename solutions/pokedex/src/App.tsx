@@ -1,7 +1,8 @@
 import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 // import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+// import './App.css';
 import { Home, PokemonDetailPage } from './pages';
 
 function App() {

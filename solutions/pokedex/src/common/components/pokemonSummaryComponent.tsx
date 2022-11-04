@@ -74,7 +74,7 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
     </Button>;
 
     const renderPokemonCardComponent = (pm: any) => {
-        return <Card id={`card-pokemon-${pm.id}`} key={`card-pokemon-${pm.id}`} style={{ borderRadius: 0, padding: 0 }}>
+        return <Card id={`card-pokemon-${pm.id}`} key={`card-pokemon-${pm.id}`} style={{ borderRadius: 0, padding: 0, color: 'black' }}>
             <Card.Body>
                 <Row>
                     {props.cardType === 'Pokemon' && <Col xs={2} style={{ padding: 0, display: 'flex', alignItems: 'flex-end' }}>{renderSound(pm)}</Col>}
@@ -135,7 +135,7 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
 
     return (
         <>
-            {props.showList ? <Card id={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: '0px' }} >
+            {props.showList ? <Card id={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: '0px',  color: 'black' }} >
                 <Card.Header>
                     <Row>
                         <Col>

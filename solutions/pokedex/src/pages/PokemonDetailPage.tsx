@@ -34,7 +34,7 @@ export const PokemonDetailPage = () => {
     }, [pokemonService, name])
 
     /**
-     * Handles liking or unliking the pokemon
+     * Handles favoriting or unfavoriting a pokemon
      * @param change The Changed input
      */
     const handleChangeFavorite = (pm: any) => {
@@ -44,12 +44,12 @@ export const PokemonDetailPage = () => {
 
     return (
         <>
-            {!loading && <Container fluid >
+            {!loading && <Container style={{ overflowX: 'hidden' }}  >
                 <div id={`div-pokemon-card-${pokemon?.id}`} className='mb-1' key={`div-pokemon-card-${pokemon?.id}`}>
                     <PokemonSummaryComponent pokemon={pokemon!} handleFavorite={handleChangeFavorite} cardType='Pokemon'></PokemonSummaryComponent>
                 </div>
                 <Row><h1>Evolutions</h1></Row>
-                <Row xs={2} >
+                <Row xs={3} md={5} lg={7} >
                     {pokemon?.previousEvolutions.map(prev => {
                         return <div style={{ padding: 4 }} key={`div-pokemon-card-${prev.id}`}>
                             <PokemonSummaryComponent pokemon={prev!} handleFavorite={handleChangeFavorite} cardType='Evolution'></PokemonSummaryComponent>
@@ -57,7 +57,7 @@ export const PokemonDetailPage = () => {
                     })}
                     {pokemon?.evolutions.map(evol => {
                         return <div key={`div-pokemon-card-${evol.id}`}>
-                            <PokemonSummaryComponent pokemon={evol!} handleFavorite={handleChangeFavorite} cardType='Evolution'></PokemonSummaryComponent>;
+                            <PokemonSummaryComponent pokemon={evol!} handleFavorite={handleChangeFavorite} cardType='Evolution'></PokemonSummaryComponent>
                         </div>
                     })}
                 </Row>

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Row, ButtonGroup, ToggleButton, Form, Col, Container } from 'react-bootstrap';
 import { PokemonSummaryComponent } from '../common/components';
 import { PokemonListResponse, PokemonSummary } from '../common/models/pokemon-management';
@@ -34,7 +34,7 @@ export const Home = () => {
   // Services
   const pokemonService = useMemo(() => { return new PokemonService(); }, []);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(() => {
     let mounted = true;
 
     Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons(LIMIT, offset)])
@@ -59,7 +59,7 @@ export const Home = () => {
         console.error(error);
       });
     return () => { mounted = false; }
-  };
+  }, [offset, pokemonService, pokemons]);
 
   useEffect(() => {
     fetchData();
@@ -114,11 +114,11 @@ export const Home = () => {
         <Row className='mb-2' style={{ paddingTop: 5 }}>
           <ButtonGroup>
             {showValues.map((showValue, idx) => (
-              <ToggleButton style={{ borderRadius: '0px', color: '#04AA6D' }}
+              <ToggleButton style={{ borderRadius: '0px' }}
                 key={idx}
                 id={`show-${idx}`}
                 type='radio'
-                variant={'outline-success'}
+                variant={'outline-primary'}
                 name='radio'
                 value={String(showValue.value)}
                 checked={showFavorite === showValue.value}
@@ -134,7 +134,7 @@ export const Home = () => {
             <Form.Control style={{ borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} type='text' placeholder='Search' onChange={handleSearchText} value={searchText} />
           </Col>
           <Col xs={'auto'}>
-            <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
+            <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0',  color: 'black' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
               <option value=''>Type</option>
               {pokemonTypes.map((pokemonType) => {
                 return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
@@ -143,7 +143,7 @@ export const Home = () => {
           </Col>
           <Col xs={'auto'}  >
             <ButtonGroup >
-              {views.map((view) => <ToggleButton style={{ padding: 0, fontSize: '25px', color: '#04AA6D' }}
+              {views.map((view) => <ToggleButton style={{ padding: 0, fontSize: '25px' }}
                 id={`toggle-${view.name}`}
                 key={`toggle-${view.name}`}
                 variant='link'
@@ -158,21 +158,22 @@ export const Home = () => {
         </Row>
       </Container>
       <hr style={{ padding: 0, border: 'none', height: '3px', backgroundColor: 'grey' }} />
-      <Container fluid>
-        <InfiniteScroll
-          dataLength={pokemons?.items.length! || 0}
-          next={fetchData}
-          hasMore={Boolean(pokemons?.items.length! !== pokemons?.count!)}
-          loader={<h4>Loading...</h4>}
-        >
-          <Row xs={showList ? 1 : 3} >
+      <InfiniteScroll
+        dataLength={pokemons?.items.length! || 0}
+        next={fetchData}
+        hasMore={Boolean(pokemons?.items.length! !== pokemons?.count!)}
+        loader={<></>}
+      >
+        <Container fluid style={{ overflowX: 'hidden' }}>
+          <Row xs={showList ? 1 : 3} md={showList ? 1 : 5} lg={showList ? 1 : 7} >
             {pokemons?.items.map((pokemon) => {
-              return <div
-                id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={pokemon.id}><PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'></PokemonSummaryComponent></div>;
+              return <div id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={`div-pokemon-card-${pokemon.id}`}>
+                <PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'></PokemonSummaryComponent>
+              </div>;
             })}
           </Row>
-        </InfiniteScroll>
-      </Container>
+        </Container>
+      </InfiniteScroll>
     </>
   );
 };
