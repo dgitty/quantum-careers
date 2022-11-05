@@ -1,11 +1,10 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { Row, ToggleButton, Col, Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { PokemonSummary } from '../models/pokemon-management';
 
 type PokemonCardProps = {
-    pokemon: PokemonSummary;
-    handleFavorite: (pokemon: PokemonSummary) => void;
+    pokemon: any;
+    handleFavorite: (pokemon: any) => void;
     showList?: boolean;
     cardType: 'Pokemon' | 'PokemonSummary' | 'Evolution'
 }
@@ -73,36 +72,40 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
         <span className='bi bi-volume-up-fill' style={{ color: 'green', fontSize: '25px' }} />
     </Button>;
 
-    const renderPokemonCardComponent = (pm: any) => {
-        return <Card id={`card-pokemon-${pm.id}`} key={`card-pokemon-${pm.id}`} style={{ borderRadius: 0, padding: 0 }}>
+    /**
+     * Renders the Pokemon Card Component. Depending on the type of card (Pokemon | Evolution) that is being displayed, certain information will show.
+     * @returns The pokemon card component
+     */
+    const renderPokemonCardComponent = () => {
+        return <Card id={`card-pokemon-${props.pokemon.id}`} key={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: 0, padding: 0 }}>
             <Card.Body>
                 <Row>
-                    {props.cardType === 'Pokemon' && <Col xs={2} style={{ padding: 0, display: 'flex', alignItems: 'flex-end' }}>{renderSound(pm)}</Col>}
-                    <Col xs={pm.type === 'Pokemon' && 10}>{renderImage(pm)}</Col>
+                    {props.cardType === 'Pokemon' && <Col xs={2} style={{ padding: 0, display: 'flex', alignItems: 'flex-end' }}>{renderSound(props.pokemon)}</Col>}
+                    <Col >{renderImage(props.pokemon)}</Col>
                 </Row>
             </Card.Body>
-            <Card.Header key={`card-header-main-${pm.id}`}>
+            <Card.Header key={`card-header-main-${props.pokemon.id}`}>
                 <Row  >
                     <Col xs={10} style={{ padding: '0px' }}>
-                        <Row>{renderTitle(pm)}</Row>
-                        {props.cardType !== 'Evolution' && <Row>{renderText(pm)}</Row>}
+                        <Row>{renderTitle(props.pokemon)}</Row>
+                        {props.cardType !== 'Evolution' && <Row>{renderText(props.pokemon)}</Row>}
                     </Col>
                     <Col xs={'auto'} style={{ textAlign: 'right', padding: '0px' }}>
-                        <Row>{renderFavorite(pm)}</Row>
+                        <Row>{renderFavorite(props.pokemon)}</Row>
                     </Col>
                 </Row>
                 {props.cardType === 'Pokemon' && <>
                     <Row >
                         <Col xs={9} style={{ paddingTop: 0, paddingLeft: 0, paddingRight: 5 }}><hr style={{ borderRadius: '25px', border: 'none', height: '10px', backgroundColor: 'purple' }} /></Col>
-                        <Col style={{ fontWeight: 'bold', padding: '0px' }}>CP: {pm.maxCP}</Col>
+                        <Col style={{ fontWeight: 'bold', padding: '0px' }}>CP: {props.pokemon.maxCP}</Col>
                     </Row>
                     <Row>
                         <Col xs={9} style={{ paddingTop: 0, paddingLeft: 0, paddingRight: 5 }}><hr style={{ borderRadius: '25px', border: 'none', height: '10px', backgroundColor: 'green' }} /></Col>
-                        <Col style={{ fontWeight: 'bold', padding: '0px' }}>HP: {pm.maxHP}</Col>
+                        <Col style={{ fontWeight: 'bold', padding: '0px' }}>HP: {props.pokemon.maxHP}</Col>
                     </Row></>}
             </Card.Header>
             {props.cardType === 'Pokemon' &&
-                <Card.Header key={`card-header-alt-${pm.id}`}>
+                <Card.Header key={`card-header-alt-${props.pokemon.id}`}>
                     <Row>
                         <Col>
                             <Row>
@@ -112,7 +115,7 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
                             </Row>
                             <Row>
                                 <Col style={{ textAlign: 'center' }}>
-                                    {pm.weight.minimum} - {pm.weight.minimum}
+                                    {props.pokemon.weight.minimum} - {props.pokemon.weight.minimum}
                                 </Col>
                             </Row>
                         </Col>
@@ -124,7 +127,7 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
                             </Row>
                             <Row>
                                 <Col style={{ textAlign: 'center' }}>
-                                    {pm.height.minimum} - {pm.height.maximum}
+                                    {props.pokemon.height.minimum} - {props.pokemon.height.maximum}
                                 </Col>
                             </Row>
                         </Col>
@@ -133,23 +136,31 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
         </Card>;
     };
 
+    /**
+     * Renders the list view of a pokemon card
+     * @returns The pokemon list component
+     */
+    const renderListComponent = () => {
+        return <Card id={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: '0px' }} >
+            <Card.Header>
+                <Row>
+                    <Col>
+                        {renderImage(props.pokemon)}
+                    </Col>
+                    <Col style={{ margin: 1 }}>
+                        <Row>{renderTitle(props.pokemon)}</Row>
+                        <Row>{renderText(props.pokemon)}</Row>
+                    </Col>
+                    <Col style={{ textAlign: 'right', margin: 1 }}>{renderFavorite(props.pokemon)}</Col>
+                </Row>
+            </Card.Header>
+        </Card>
+
+    }
     return (
         <>
-            {props.showList ? <Card id={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: '0px' }} >
-                <Card.Header>
-                    <Row>
-                        <Col>
-                            {renderImage(props.pokemon)}
-                        </Col>
-                        <Col style={{ margin: 1 }}>
-                            <Row>{renderTitle(props.pokemon)}</Row>
-                            <Row>{renderText(props.pokemon)}</Row>
-                        </Col>
-                        <Col style={{ textAlign: 'right', margin: 1 }}>{renderFavorite(props.pokemon)}</Col>
-                    </Row>
-                </Card.Header>
-            </Card>
-                : renderPokemonCardComponent(props.pokemon)
+            {props.showList ? renderListComponent()
+                : renderPokemonCardComponent()
             }
         </>
     )

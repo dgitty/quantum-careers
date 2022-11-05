@@ -42,7 +42,6 @@ export const Home = () => {
   const fetchData = useCallback(() => {
     let mounted = true;
 
-    if (loading) {
       Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons(LIMIT, offset)])
         .then(([pokemonTypeList, pokemonList]) => {
           if (mounted) {
@@ -65,13 +64,12 @@ export const Home = () => {
           console.error(error);
         });
 
-    }
     return () => { mounted = false; }
-  }, [offset, pokemonService, pokemons, loading]);
+  }, [offset, pokemonService, pokemons]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData])
+  }, [])
 
   /**
    * Handles showing all or favorite pokemons
@@ -150,7 +148,7 @@ export const Home = () => {
                 })}
               </Form.Select>
             </Col>
-            <Col xs={'auto'}>
+            <Col xs={'auto'}  >
               <ButtonGroup >
                 {views.map((view) => <ToggleButton style={{ padding: 0, fontSize: '25px' }}
                   id={`toggle-${view.name}`}
