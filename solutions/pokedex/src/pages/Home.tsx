@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Row, ButtonGroup, ToggleButton, Form, Col, Container } from 'react-bootstrap';
-import { PokemonSummaryComponent } from '../common/components';
+import { Loader, PokemonSummaryComponent } from '../common/components';
 import { PokemonListResponse, PokemonSummary } from '../common/models/pokemon-management';
 import { PokemonService } from '../common/services';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -18,6 +18,8 @@ export const Home = () => {
 
   const [showFavorite, setShowFavorite] = useState<boolean | undefined>();
   const showValues = [
+    // All is set to undefined instead of false so that
+    // the request data returns all items instead of unfavorited items
     { name: 'All', value: undefined },
     { name: 'Favorites', value: true },
   ];
@@ -34,36 +36,42 @@ export const Home = () => {
   // Services
   const pokemonService = useMemo(() => { return new PokemonService(); }, []);
 
+  /**
+   * Fetches data from pokemon api
+   */
   const fetchData = useCallback(() => {
     let mounted = true;
 
-    Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons(LIMIT, offset)])
-      .then(([pokemonTypeList, pokemonList]) => {
-        if (mounted) {
-          setPokemonTypes(pokemonTypeList);
+    if (loading) {
+      Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons(LIMIT, offset)])
+        .then(([pokemonTypeList, pokemonList]) => {
+          if (mounted) {
+            setPokemonTypes(pokemonTypeList);
 
-          if (pokemons) {
-            var tempPokemons: PokemonListResponse = { ...pokemons! };
-            tempPokemons.items = tempPokemons.items.concat(pokemonList.items);
-            setPokemons(tempPokemons);
+            if (pokemons) {
+              var tempPokemons: PokemonListResponse = { ...pokemons! };
+              tempPokemons.items = tempPokemons.items.concat(pokemonList.items);
+              setPokemons(tempPokemons);
+            }
+            else {
+              setPokemons(pokemonList);
+            }
+            setOffset(offset + LIMIT);
+            setLoading(false);
           }
-          else {
-            setPokemons(pokemonList);
-          }
-          setOffset(offset + LIMIT);
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        if (mounted) { setLoading(false); }
-        console.error(error);
-      });
+        })
+        .catch((error) => {
+          if (mounted) { setLoading(false); }
+          console.error(error);
+        });
+
+    }
     return () => { mounted = false; }
-  }, [offset, pokemonService, pokemons]);
+  }, [offset, pokemonService, pokemons, loading]);
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, [fetchData])
 
   /**
    * Handles showing all or favorite pokemons
@@ -106,74 +114,76 @@ export const Home = () => {
       : pokemonService.postPokemonUnfavorite(pokemon.id).then(() => {
         showFavorite && pokemonService.getPokemons(LIMIT, undefined, searchText, showFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
       });
-  };
+  }
 
   return (
-    <>
-      <Container fluid>
-        <Row className='mb-2' style={{ paddingTop: 5 }}>
-          <ButtonGroup>
-            {showValues.map((showValue, idx) => (
-              <ToggleButton style={{ borderRadius: '0px' }}
-                key={idx}
-                id={`show-${idx}`}
-                type='radio'
-                variant={'outline-primary'}
-                name='radio'
-                value={String(showValue.value)}
-                checked={showFavorite === showValue.value}
-                onChange={handleShow}
-              >
-                {showValue.name}
-              </ToggleButton>
-            ))}
-          </ButtonGroup>
-        </Row>
-        <Row style={{ padding: 0 }}>
-          <Col>
-            <Form.Control style={{ borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} type='text' placeholder='Search' onChange={handleSearchText} value={searchText} />
-          </Col>
-          <Col xs={'auto'}>
-            <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0',  color: 'black' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
-              <option value=''>Type</option>
-              {pokemonTypes.map((pokemonType) => {
-                return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
-              })}
-            </Form.Select>
-          </Col>
-          <Col xs={'auto'}  >
-            <ButtonGroup >
-              {views.map((view) => <ToggleButton style={{ padding: 0, fontSize: '25px' }}
-                id={`toggle-${view.name}`}
-                key={`toggle-${view.name}`}
-                variant='link'
-                type='checkbox'
-                checked={view.value}
-                value={String(view.value)}
-                onChange={(change) => setShowList(change.target.checked)} className={view.className}>
-              </ToggleButton>
-              )}
+    <Loader loading={loading!}>
+      <>
+        <Container fluid>
+          <Row className='mb-2' style={{ paddingTop: 5 }}>
+            <ButtonGroup>
+              {showValues.map((showValue, idx) => (
+                <ToggleButton style={{ borderRadius: '0px' }}
+                  key={idx}
+                  id={`show-${idx}`}
+                  type='radio'
+                  variant={'outline-primary'}
+                  name='radio'
+                  value={String(showValue.value)}
+                  checked={showFavorite === showValue.value}
+                  onChange={handleShow}
+                >
+                  {showValue.name}
+                </ToggleButton>
+              ))}
             </ButtonGroup>
-          </Col>
-        </Row>
-      </Container>
-      <hr style={{ padding: 0, border: 'none', height: '3px', backgroundColor: 'grey' }} />
-      <InfiniteScroll
-        dataLength={pokemons?.items.length! || 0}
-        next={fetchData}
-        hasMore={Boolean(pokemons?.items.length! !== pokemons?.count!)}
-        loader={<></>}
-      >
-        <Container fluid style={{ overflowX: 'hidden' }}>
-          <Row xs={showList ? 1 : 3} md={showList ? 1 : 5} lg={showList ? 1 : 7} >
-            {pokemons?.items.map((pokemon) => {
-              return <div id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={`div-pokemon-card-${pokemon.id}`}>
-                <PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'></PokemonSummaryComponent>
-              </div>;
-            })}
+          </Row>
+          <Row style={{ padding: 0 }}>
+            <Col>
+              <Form.Control style={{ borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} type='text' placeholder='Search' onChange={handleSearchText} value={searchText} />
+            </Col>
+            <Col xs={'auto'}>
+              <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
+                <option value=''>Type</option>
+                {pokemonTypes.map((pokemonType) => {
+                  return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
+                })}
+              </Form.Select>
+            </Col>
+            <Col xs={'auto'}>
+              <ButtonGroup >
+                {views.map((view) => <ToggleButton style={{ padding: 0, fontSize: '25px' }}
+                  id={`toggle-${view.name}`}
+                  key={`toggle-${view.name}`}
+                  variant='link'
+                  type='checkbox'
+                  checked={view.value}
+                  value={String(view.value)}
+                  onChange={(change) => setShowList(change.target.checked)} className={view.className}>
+                </ToggleButton>
+                )}
+              </ButtonGroup>
+            </Col>
           </Row>
         </Container>
-      </InfiniteScroll>
-    </>
+        <hr style={{ padding: 0, border: 'none', height: '3px', backgroundColor: 'grey' }} />
+        <InfiniteScroll
+          dataLength={pokemons?.items.length! || 0}
+          next={fetchData}
+          hasMore={Boolean(pokemons?.items.length! !== pokemons?.count!)}
+          loader={<></>}
+        >
+          <Container fluid style={{ overflowX: 'hidden' }}>
+            <Row xs={showList ? 1 : 3} md={showList ? 1 : 5} lg={showList ? 1 : 7} >
+              {pokemons?.items.map((pokemon) => {
+                return <div id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={`div-pokemon-card-${pokemon.id}`}>
+                  <PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'></PokemonSummaryComponent>
+                </div>;
+              })}
+            </Row>
+          </Container>
+        </InfiniteScroll>
+      </>
+    </Loader>
   );
-};
+}

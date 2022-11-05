@@ -9,8 +9,6 @@ import { Utils } from '../utils';
  * @extends {BaseAPISerivce}
  */
 export class PokemonService extends BaseApiService {
-
-
     /**
      *  Gets the Pokemon List Response
      * @param limit Number of pokemons to limit
@@ -57,6 +55,7 @@ export class PokemonService extends BaseApiService {
     public postPokemonUnfavorite(id: string): Promise<Pokemon> {
         return this.post(`${configData.SERVER_URL}/pokemon/${id}/unfavorite`);
     }
+
     /**
      * Gets the pokemon
      * @param id The pokemon id

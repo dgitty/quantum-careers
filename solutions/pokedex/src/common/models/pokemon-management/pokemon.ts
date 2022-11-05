@@ -17,5 +17,4 @@ export interface Pokemon {
     maxCP: number;
     maxHP: number;
     sound: string;
-
 }

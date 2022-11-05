@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Row, Container } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { PokemonSummaryComponent } from '../common/components';
+import { Loader, PokemonSummaryComponent } from '../common/components';
 import { Pokemon } from '../common/models/pokemon-management';
 import { PokemonService } from '../common/services';
 
@@ -25,6 +25,7 @@ export const PokemonDetailPage = () => {
             }))
             .catch((error) => {
                 if (mounted) {
+                    console.log('NOT FOUND');
                     setLoading(false);
                 }
                 console.error(error);
@@ -43,8 +44,8 @@ export const PokemonDetailPage = () => {
     };
 
     return (
-        <>
-            {!loading && <Container style={{ overflowX: 'hidden' }}  >
+        <Loader loading={loading!}>
+            <Container style={{ overflowX: 'hidden' }}  >
                 <div id={`div-pokemon-card-${pokemon?.id}`} className='mb-1' key={`div-pokemon-card-${pokemon?.id}`}>
                     <PokemonSummaryComponent pokemon={pokemon!} handleFavorite={handleChangeFavorite} cardType='Pokemon'></PokemonSummaryComponent>
                 </div>
@@ -62,7 +63,6 @@ export const PokemonDetailPage = () => {
                     })}
                 </Row>
             </Container>
-            }
-        </>
+       </Loader>
     );
-};
+}

@@ -11,7 +11,6 @@ const handleError = (url: string, error: any) => {
         throw error;
     }
     throw new NetworkError(url, error);
-
 }
 
 /**
@@ -77,5 +76,4 @@ export abstract class BaseApiService {
             handleError(url, error);
         }
     }
-
 }
