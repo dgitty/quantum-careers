@@ -1,5 +1,4 @@
 import { Container } from "react-bootstrap"
-import '../../styles/pokemon.scss'
 
 export const Loader = ({ loading, children }: { loading: boolean, children?: JSX.Element } = { loading: true }) => {
 

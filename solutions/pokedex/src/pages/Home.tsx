@@ -42,27 +42,27 @@ export const Home = () => {
   const fetchData = useCallback(() => {
     let mounted = true;
 
-      Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons(LIMIT, offset)])
-        .then(([pokemonTypeList, pokemonList]) => {
-          if (mounted) {
-            setPokemonTypes(pokemonTypeList);
+    Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons(LIMIT, offset)])
+      .then(([pokemonTypeList, pokemonList]) => {
+        if (mounted) {
+          setPokemonTypes(pokemonTypeList);
 
-            if (pokemons) {
-              var tempPokemons: PokemonListResponse = { ...pokemons! };
-              tempPokemons.items = tempPokemons.items.concat(pokemonList.items);
-              setPokemons(tempPokemons);
-            }
-            else {
-              setPokemons(pokemonList);
-            }
-            setOffset(offset + LIMIT);
-            setLoading(false);
+          if (pokemons) {
+            var tempPokemons: PokemonListResponse = { ...pokemons! };
+            tempPokemons.items = tempPokemons.items.concat(pokemonList.items);
+            setPokemons(tempPokemons);
           }
-        })
-        .catch((error) => {
-          if (mounted) { setLoading(false); }
-          console.error(error);
-        });
+          else {
+            setPokemons(pokemonList);
+          }
+          setOffset(offset + LIMIT);
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        if (mounted) { setLoading(false); }
+        console.error(error);
+      });
 
     return () => { mounted = false; }
   }, [offset, pokemonService, pokemons]);
@@ -174,7 +174,7 @@ export const Home = () => {
           <Container fluid style={{ overflowX: 'hidden' }}>
             <Row xs={showList ? 1 : 3} md={showList ? 1 : 5} lg={showList ? 1 : 7} >
               {pokemons?.items.map((pokemon) => {
-                return <div id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={`div-pokemon-card-${pokemon.id}`}>
+                return <div id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={`div-pokemon-card-${pokemon.id}`} style={{ padding: 2 }}>
                   <PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'></PokemonSummaryComponent>
                 </div>;
               })}

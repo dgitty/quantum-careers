@@ -16,16 +16,15 @@ export const PokemonDetailPage = () => {
 
     useEffect(() => {
         let mounted = true;
-        pokemonService.getPokemons(undefined, undefined, name).then((pokemons) =>
-            pokemonService.getPokemon(pokemons.items.find(i => i.name === name)?.id!).then((data) => {
+        pokemonService.getPokemons(undefined, undefined, name).then((pokemons) =>{
+            pokemons.items.length && pokemonService.getPokemon(pokemons.items.find(i => i.name === name)?.id!).then((data) => {
                 if (mounted) {
                     setPokemon(data);
                     setLoading(false);
                 }
-            }))
+            })})
             .catch((error) => {
                 if (mounted) {
-                    console.log('NOT FOUND');
                     setLoading(false);
                 }
                 console.error(error);
@@ -45,7 +44,7 @@ export const PokemonDetailPage = () => {
 
     return (
         <Loader loading={loading!}>
-            <Container style={{ overflowX: 'hidden' }}  >
+            <Container style={{ overflowX: 'hidden', padding: 10 }}  >
                 <div id={`div-pokemon-card-${pokemon?.id}`} className='mb-1' key={`div-pokemon-card-${pokemon?.id}`}>
                     <PokemonSummaryComponent pokemon={pokemon!} handleFavorite={handleChangeFavorite} cardType='Pokemon'></PokemonSummaryComponent>
                 </div>

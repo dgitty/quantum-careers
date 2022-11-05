@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useState } from 'react';
-import { Row, ToggleButton, Col, Card, Button } from 'react-bootstrap';
+import { Row, ToggleButton, Col, Card, Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 type PokemonCardProps = {
@@ -38,19 +38,20 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
      * Renders the pokemon card title
      * @returns Card title
      */
-    const renderTitle = (pm: any) => <Card.Title style={{ fontWeight: 'bold' }}>{pm?.name}</Card.Title>;
+    const renderTitle = (pm: any) => <text style={{ fontWeight: 'bold', fontSize: '12px' }}>{pm?.name}</text>;
 
     /**
      * Renders the pokemon card text
      * @returns Card text
      */
-    const renderText = (pm: any) => <Card.Text>{pm?.types.join(', ')}</Card.Text>;
+    const renderSubtitle = (pm: any) => <text style={{ fontSize: '10px' }}>{pm?.types.join(', ')}</text>;
 
     /**
      * Renders the pokemon favorite button
      * @returns Toggle button
      */
     const renderFavorite = (pm: any) => <ToggleButton
+        style={{ padding: 0 }}
         id={`toggle-is-favorite-${pm?.id}`}
         variant='link'
         type='checkbox'
@@ -84,57 +85,66 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
                     <Col >{renderImage(props.pokemon)}</Col>
                 </Row>
             </Card.Body>
-            <Card.Header key={`card-header-main-${props.pokemon.id}`}>
-                <Row  >
+            <Card.Header key={`card-header-main-${props.pokemon.id}`} style={{ borderBottom: 0 }}>
+                {/* <Row>
                     <Col xs={10} style={{ padding: '0px' }}>
                         <Row>{renderTitle(props.pokemon)}</Row>
-                        {props.cardType !== 'Evolution' && <Row>{renderText(props.pokemon)}</Row>}
+                        {props.cardType !== 'Evolution' && <Row>{renderSubtitle(props.pokemon)}</Row>}
                     </Col>
-                    <Col xs={'auto'} style={{ textAlign: 'right', padding: '0px' }}>
+                    <Col style={{ textAlign: 'right', padding: '0px' }}>
                         <Row>{renderFavorite(props.pokemon)}</Row>
+                    </Col>
+                </Row> */}
+                <Row style={{ position: 'relative', padding: 0 }}>
+                    <Col style={{ padding: '0px' }}>
+                        {renderTitle(props.pokemon)}
+                        {props.cardType !== 'Evolution' && <Row>{renderSubtitle(props.pokemon)}</Row>}
+                    </Col>
+                    <Col style={{ textAlign: 'right', padding: '0px' }}>
+                        {renderFavorite(props.pokemon)}
                     </Col>
                 </Row>
                 {props.cardType === 'Pokemon' && <>
-                    <Row >
-                        <Col xs={9} style={{ paddingTop: 0, paddingLeft: 0, paddingRight: 5 }}><hr style={{ borderRadius: '25px', border: 'none', height: '10px', backgroundColor: 'purple' }} /></Col>
-                        <Col style={{ fontWeight: 'bold', padding: '0px' }}>CP: {props.pokemon.maxCP}</Col>
+                    <Row style={{ padding: 0 }}>
+                        <Col xs={10} md={11} lg={11} style={{ paddingLeft: 0, paddingRight: 5 }}><hr className='xp-bar' style={{ marginTop: 8, backgroundColor: '#4828E4' }} /></Col>
+                        <Col style={{ fontWeight: 'bold' }}><Row style={{ position: 'absolute', paddingRight: 10 }}>CP: {props.pokemon.maxCP}</Row></Col>
                     </Row>
-                    <Row>
-                        <Col xs={9} style={{ paddingTop: 0, paddingLeft: 0, paddingRight: 5 }}><hr style={{ borderRadius: '25px', border: 'none', height: '10px', backgroundColor: 'green' }} /></Col>
-                        <Col style={{ fontWeight: 'bold', padding: '0px' }}>HP: {props.pokemon.maxHP}</Col>
+                    <Row style={{ padding: 0 }}>
+                        <Col xs={10} md={11} lg={11} style={{ paddingLeft: 0, paddingRight: 5 }}><hr className='xp-bar' style={{ marginTop: 8, backgroundColor: 'green' }} /></Col>
+                        <Col style={{ fontWeight: 'bold' }}><Row style={{ position: 'absolute', paddingRight: 10 }}>HP: {props.pokemon.maxHP}</Row></Col>
                     </Row></>}
             </Card.Header>
             {props.cardType === 'Pokemon' &&
-                <Card.Header key={`card-header-alt-${props.pokemon.id}`}>
-                    <Row>
-                        <Col>
-                            <Row>
-                                <Col style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                <Card.Header key={`card-header-alt-${props.pokemon.id}`} style={{ borderBottom: 0 }}>
+                    <Row style={{ padding: 0 }}>
+                        <Col style={{ borderRight: 'solid' }}>
+                            <Row >
+                                <text className='text-center' style={{ fontWeight: 'bold' }}>
                                     Weight
-                                </Col>
+                                </text>
                             </Row>
                             <Row>
-                                <Col style={{ textAlign: 'center' }}>
+                                <text className='text-center' >
                                     {props.pokemon.weight.minimum} - {props.pokemon.weight.minimum}
-                                </Col>
+                                </text>
                             </Row>
                         </Col>
                         <Col>
                             <Row>
-                                <Col style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                                <text className='text-center' style={{ fontWeight: 'bold' }}>
                                     Height
-                                </Col>
+                                </text>
                             </Row>
                             <Row>
-                                <Col style={{ textAlign: 'center' }}>
+                                <text className='text-center' >
                                     {props.pokemon.height.minimum} - {props.pokemon.height.maximum}
-                                </Col>
+                                </text>
                             </Row>
                         </Col>
                     </Row>
                 </Card.Header>}
-        </Card>;
-    };
+        </Card>
+    }
 
     /**
      * Renders the list view of a pokemon card
@@ -142,20 +152,23 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
      */
     const renderListComponent = () => {
         return <Card id={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: '0px' }} >
-            <Card.Header>
+            <Container fluid>
                 <Row>
-                    <Col>
+                    <Col xs={2} md={2} lg={2}>
                         {renderImage(props.pokemon)}
                     </Col>
-                    <Col style={{ margin: 1 }}>
-                        <Row>{renderTitle(props.pokemon)}</Row>
-                        <Row>{renderText(props.pokemon)}</Row>
+                    <Col style={{ background: '#F0F0F0' }}>
+                        <Row>
+                            <Col>
+                                <Row>{renderTitle(props.pokemon)}</Row>
+                                <Row>{renderSubtitle(props.pokemon)}</Row>
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>{renderFavorite(props.pokemon)}</Col>
+                        </Row>
                     </Col>
-                    <Col style={{ textAlign: 'right', margin: 1 }}>{renderFavorite(props.pokemon)}</Col>
                 </Row>
-            </Card.Header>
+            </Container>
         </Card>
-
     }
     return (
         <>
