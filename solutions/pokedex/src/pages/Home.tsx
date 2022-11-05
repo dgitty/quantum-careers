@@ -12,8 +12,8 @@ export const Home = () => {
   // Variables associated to user input
   const [showList, setShowList] = useState(false);
   const views = [
-    { name: 'Grid', className: 'bi bi-list', value: false },
-    { name: 'List', className: 'bi bi-grid-3x2-gap-fill', value: true },
+    { name: 'Grid', className: 'bi bi-list', value: false, style: { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 1, fontSize: '25px', borderLeft: 0, borderBottom: 0, borderTop: 0, borderRight: 'solid', borderWidth: '1px', borderColor: '#DCDCDC' } },
+    { name: 'List', className: 'bi bi-grid-3x2-gap-fill', value: true, style: { paddingTop: 0, paddingBottom: 0, paddingLeft: 3, paddingRight: 0, fontSize: '24px' } },
   ];
 
   const [showFavorite, setShowFavorite] = useState<boolean | undefined>();
@@ -137,10 +137,10 @@ export const Home = () => {
             </ButtonGroup>
           </Row>
           <Row style={{ padding: 0 }}>
-            <Col>
+            <Col style={{paddingRight:0}}>
               <Form.Control style={{ borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} type='text' placeholder='Search' onChange={handleSearchText} value={searchText} />
             </Col>
-            <Col xs={'auto'}>
+            <Col xs={'auto'} style={{paddingRight:0}}>
               <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
                 <option value=''>Type</option>
                 {pokemonTypes.map((pokemonType) => {
@@ -148,9 +148,10 @@ export const Home = () => {
                 })}
               </Form.Select>
             </Col>
-            <Col xs={'auto'}  >
+            <Col xs={'auto'} style={{paddingLeft:2}}  >
+              {/* style={{ borderRight: 'solid', borderWidth: '1px', borderColor: '#DCDCDC' }} */}
               <ButtonGroup >
-                {views.map((view) => <ToggleButton style={{ padding: 0, fontSize: '25px' }}
+                {views.map((view) => <ToggleButton style={view.style}
                   id={`toggle-${view.name}`}
                   key={`toggle-${view.name}`}
                   variant='link'
@@ -165,22 +166,26 @@ export const Home = () => {
           </Row>
         </Container>
         <hr style={{ padding: 0, border: 'none', height: '3px', backgroundColor: 'grey' }} />
-        <InfiniteScroll
-          dataLength={pokemons?.items.length! || 0}
-          next={fetchData}
-          hasMore={Boolean(pokemons?.items.length! !== pokemons?.count!)}
-          loader={<></>}
-        >
-          <Container fluid style={{ overflowX: 'hidden' }}>
-            <Row xs={showList ? 1 : 3} md={showList ? 1 : 5} lg={showList ? 1 : 7} >
-              {pokemons?.items.map((pokemon) => {
-                return <div id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={`div-pokemon-card-${pokemon.id}`} style={{ padding: 2 }}>
-                  <PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'></PokemonSummaryComponent>
-                </div>;
-              })}
-            </Row>
-          </Container>
-        </InfiniteScroll>
+        <Container fluid>
+          <InfiniteScroll
+            dataLength={pokemons?.items.length! || 0}
+            next={fetchData}
+            hasMore={Boolean(pokemons?.items.length! !== pokemons?.count!)}
+            loader={<></>}
+          >
+            <Container fluid style={{ overflowX: 'hidden' }}>
+              <Row xs={showList ? 1 : 3} md={showList ? 1 : 5} lg={showList ? 1 : 7} >
+                {pokemons?.items.map((pokemon) => {
+                  return <Col style={{ padding: 2 }} key={`div-pokemon-card-${pokemon.id}`} >
+                    {/* <div id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={`div-pokemon-card-${pokemon.id}`} style={{ padding: 2 }}> */}
+                    <PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'></PokemonSummaryComponent>
+                    {/* </div> */}
+                  </Col>
+                })}
+              </Row>
+            </Container>
+          </InfiniteScroll>
+        </Container>
       </>
     </Loader>
   );

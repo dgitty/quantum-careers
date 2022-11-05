@@ -38,13 +38,13 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
      * Renders the pokemon card title
      * @returns Card title
      */
-    const renderTitle = (pm: any) => <text style={{ fontWeight: 'bold', fontSize: '12px' }}>{pm?.name}</text>;
+    const renderTitle = (pm: any) => <h1 style={{ fontWeight: 'bold', fontSize: props.cardType === 'Pokemon' ? '18px' : '12px' }}>{pm?.name}</h1>;
 
     /**
      * Renders the pokemon card text
      * @returns Card text
      */
-    const renderSubtitle = (pm: any) => <text style={{ fontSize: '10px' }}>{pm?.types.join(', ')}</text>;
+    const renderSubtitle = (pm: any) => <p style={{ fontSize: props.cardType === 'Pokemon' ? '16px' : '10px' }}>{pm?.types.join(', ')}</p>;
 
     /**
      * Renders the pokemon favorite button
@@ -78,23 +78,14 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
      * @returns The pokemon card component
      */
     const renderPokemonCardComponent = () => {
-        return <Card id={`card-pokemon-${props.pokemon.id}`} key={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: 0, padding: 0 }}>
+        return <Card className='h-100' id={`card-pokemon-${props.pokemon.id}`} key={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: 0, padding: 0 }}>
             <Card.Body>
                 <Row>
                     {props.cardType === 'Pokemon' && <Col xs={2} style={{ padding: 0, display: 'flex', alignItems: 'flex-end' }}>{renderSound(props.pokemon)}</Col>}
                     <Col >{renderImage(props.pokemon)}</Col>
                 </Row>
             </Card.Body>
-            <Card.Header key={`card-header-main-${props.pokemon.id}`} style={{ borderBottom: 0 }}>
-                {/* <Row>
-                    <Col xs={10} style={{ padding: '0px' }}>
-                        <Row>{renderTitle(props.pokemon)}</Row>
-                        {props.cardType !== 'Evolution' && <Row>{renderSubtitle(props.pokemon)}</Row>}
-                    </Col>
-                    <Col style={{ textAlign: 'right', padding: '0px' }}>
-                        <Row>{renderFavorite(props.pokemon)}</Row>
-                    </Col>
-                </Row> */}
+            <Card.Header key={`card-header-main-${props.pokemon.id}`}>
                 <Row style={{ position: 'relative', padding: 0 }}>
                     <Col style={{ padding: '0px' }}>
                         {renderTitle(props.pokemon)}
@@ -115,30 +106,30 @@ export const PokemonSummaryComponent = (props: PokemonCardProps) => {
                     </Row></>}
             </Card.Header>
             {props.cardType === 'Pokemon' &&
-                <Card.Header key={`card-header-alt-${props.pokemon.id}`} style={{ borderBottom: 0 }}>
-                    <Row style={{ padding: 0 }}>
-                        <Col style={{ borderRight: 'solid' }}>
-                            <Row >
-                                <text className='text-center' style={{ fontWeight: 'bold' }}>
+                <Card.Header key={`card-header-alt-${props.pokemon.id}`} style={{ borderBottom: 0, paddingTop: 0, paddingBottom: 0 }}>
+                    <Row>
+                        <Col style={{ borderRight: 'solid', borderWidth: '1px', borderColor: '#DCDCDC' }}>
+                            <Row>
+                                <p className='text-center' style={{ fontWeight: 'bold', paddingTop: 10, marginBottom:0 }}>
                                     Weight
-                                </text>
+                                </p>
                             </Row>
                             <Row>
-                                <text className='text-center' >
+                                <p className='text-center'  >
                                     {props.pokemon.weight.minimum} - {props.pokemon.weight.minimum}
-                                </text>
+                                </p>
                             </Row>
                         </Col>
                         <Col>
                             <Row>
-                                <text className='text-center' style={{ fontWeight: 'bold' }}>
+                                <p className='text-center' style={{ fontWeight: 'bold', paddingTop: 10, marginBottom:0 }}>
                                     Height
-                                </text>
+                                </p>
                             </Row>
                             <Row>
-                                <text className='text-center' >
+                                <p className='text-center'  >
                                     {props.pokemon.height.minimum} - {props.pokemon.height.maximum}
-                                </text>
+                                </p>
                             </Row>
                         </Col>
                     </Row>

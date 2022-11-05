@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Row, Container } from 'react-bootstrap';
+import { Row, Container, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { Loader, PokemonSummaryComponent } from '../common/components';
 import { Pokemon } from '../common/models/pokemon-management';
@@ -16,13 +16,14 @@ export const PokemonDetailPage = () => {
 
     useEffect(() => {
         let mounted = true;
-        pokemonService.getPokemons(undefined, undefined, name).then((pokemons) =>{
+        pokemonService.getPokemons(undefined, undefined, name).then((pokemons) => {
             pokemons.items.length && pokemonService.getPokemon(pokemons.items.find(i => i.name === name)?.id!).then((data) => {
                 if (mounted) {
                     setPokemon(data);
                     setLoading(false);
                 }
-            })})
+            })
+        })
             .catch((error) => {
                 if (mounted) {
                     setLoading(false);
@@ -51,17 +52,21 @@ export const PokemonDetailPage = () => {
                 <Row><h1>Evolutions</h1></Row>
                 <Row xs={3} md={5} lg={7} >
                     {pokemon?.previousEvolutions.map(prev => {
-                        return <div style={{ padding: 4 }} key={`div-pokemon-card-${prev.id}`}>
+                        return <Col  style={{ padding: 2 }}>
+                            {/* <div style={{ padding: 4 }} key={`div-pokemon-card-${prev.id}`}> */}
                             <PokemonSummaryComponent pokemon={prev!} handleFavorite={handleChangeFavorite} cardType='Evolution'></PokemonSummaryComponent>
-                        </div>;
+                            {/* </div>; */}
+                        </Col>
                     })}
                     {pokemon?.evolutions.map(evol => {
-                        return <div key={`div-pokemon-card-${evol.id}`}>
+                        return <Col  style={{ padding: 2 }}>
+                            {/* <div key={`div-pokemon-card-${evol.id}`}> */}
                             <PokemonSummaryComponent pokemon={evol!} handleFavorite={handleChangeFavorite} cardType='Evolution'></PokemonSummaryComponent>
-                        </div>
+                            {/* </div> */}
+                        </Col>
                     })}
                 </Row>
             </Container>
-       </Loader>
+        </Loader>
     );
 }
