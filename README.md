@@ -20,11 +20,15 @@ $ npm ci
 $ npm run start
 ```
 
-#### Other commands
+#### Run Tests
 
 End to End testing path: `<project_main>/solutions/pokedex/cypress`
+
 Run end to end tests (Run the app first before running e2e tests): `npm run test:e2e`
+
 Run end to end tests command line interface (Run the app first before running e2e tests): `npm run test:e2e-ci`
+
+#### Other commends
 
 Run linters: `npm run lint`
 
