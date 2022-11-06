@@ -1,65 +1,59 @@
-# IBM Quantum Career Opportunities
+# IBM Quantum Challenges
 
-Learn about [internship opportunities](https://www.ibm.com/quantum-computing/internship/) and entry level opportunities offered by IBM Quantum. Search the [IBM careers website](http://ibm.biz/quantum-careers) for additional quantum computing opportunities not listed below.
+Hi! I'm Dalina and I'm on a mission to complete this challenge!
 
-## Internships
+## Challenges
 
-Learn more about the application process by reading *Apply for a summer 2022 internship with IBM Quantum* on the IBM Research Blog:  
-https://research.ibm.com/blog/2022-quantum-internships
+### Frontend Challenge
 
-Below you'll find a list of open IBM Quantum internship roles. Applicants should submit their resumes to the appropriate job requisite(s). Cover letters and recommendation letters are _not_ required as part of your application.
+challenge: `<project_main/challenges/frontend>`
+solution: `<project_main>/solutions/pokedex`
+video: `<project_main>/solutions/pokedex/pokedex_challenge.mp4`
 
-International students (based outside the United States) are eligible to apply for most roles. If you have any questions about IBM Quantum internships not addressed here then please send an email to quantum@us.ibm.com and we will do our best to get back to you with a response.
+#### Run the app
 
-### Quantum & Qiskit Developer Intern
+```bash
+# Navigate to the app
+$ cd solutions/pokedex
+# Install dependencies
+$ npm ci
+# Run the app
+$ npm run start
+```
 
-As a software developer with IBM Quantum, your job will be to write code for the suite of quantum software tools and cloud services that are part of our full-stack approach to delivering IBM’s quantum computing systems to quantum application developers and research scientists.
+#### Run Tests
 
-Areas of software development include quantum machine learning, quantum biology and health informatics, quantum algorithms for chemistry, quantum simulations, quantum optimization, quantum software architecture, cloud microservices, and cloud APIs (among other areas).
+Run end to end tests (Run the app first before running e2e tests): `npm run test:e2e`
 
-***Applications are now closed for all quantum & Qiskit developer summer 2022 internship roles within the United States.***
+Run end to end tests command line interface (Run the app first before running e2e tests): `npm run test:e2e-ci`
 
-Quantum & Qiskit developer summer interns will work at either the IBM Thomas J. Watson Research Center (Yorktown Heights, NY, USA), a workplace in New York City, or IBM Research–Almaden (San Jose, CA, USA) for up to 12 weeks during the summer of 2022.
+End to End tests exist at the following location: `<project_main>/solutions/pokedex/cypress`
 
-### Quantum Engineer Intern
 
-As an engineer with IBM Quantum, your job will be to advance the development of quantum computing systems. Areas of engineering include hardware, firmware, superconducting qubits, cryoelectronic circuit design, quantum microwave engineering, and quantum FPGA engineering (among other areas).
+#### Other commends
 
-***Applications are now closed for all quantum engineer summer 2022 internship roles within the United States.***
+Run linters: `npm run lint`
 
-Quantum engineer summer interns will work at either the IBM Thomas J. Watson Research Center (Yorktown Heights, NY, USA) or one of the IBM Quantum labs in Rochester, MN, USA or Poughkeepsie, NY, USA for up to 12 weeks during the summer of 2022.
+### Notes
 
-### Quantum Research Intern
+- I went with React as that was what I'm most familiar with and it allows for reuse of compoenents which I like.
+- Created end to end test with cypress as I felt it was best to demonstrate the expected outcomes, behaviours of the features, and what should exist on the ui.
+- Acquired Bootstrap icons from cdn and imported https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css
+- Created BaseApiService to provide and interface to backend api for new services
+- config.json contains server url path and is intended for any configurable items. I would use a .env file for environment variables for the individual user to configure the server url (in the event the server urls could be different) usually but to reduce the number of steps a person would have to do to get the app running I used a config.json file.
+- Used infinite scrolling for a seamless look and feel
+- Created a base Pokemon Summary Component to be easily reused as I saw that was content common on several views (i.e. details page and summary)
+- I've considered including .eslintrc.json file and following the style standard but for the sake of time I decided to not include that as I saw there would have been a lot of changes that would be required. I felt that for the scope of this effort, focusing on the feaures was most important. However, I did set some eslint rules in package.json
+- I felt that the styling took a bit more of my time than developing the features/functionality since I was trying to make the app look similar to what was demonstrated in the example video.
+- Transitions css to scss as scss is Syntactically Awesome Style Sheet.
+- Whenever the page is loading it'll display a pokeball spinning which I thought was cool.
+- To use or to not use semicolons?! I went with using semicolons... I wasn't stuck on using one way over the other but just went with using semicolons.
+- My test for favoriting/unfavoriting a pokemon is a little trippy I think. I've seen it pass most times but a few times it didn't pass but couldn't catch why that was.
 
-As an experimentalist, theorist, or quantum information scientist with IBM Quantum, your job will be to advance the field of quantum computing research. Areas of research include superconducting qubits, quantum control, quantum error correction, quantum complexity theory, quantum algorithms, quantum machine learning, and quantum compilers and optimizers (among other areas).
+### Resources
 
-***Applications are now closed for all quantum research summer 2022 internship roles within the United States, as well as for the [Quantum Undergraduate Research at IBM and Princeton (QURIP)](https://www.ibm.com/quantum-computing/internship/qurip/) internship program.***
-
-Quantum research interns will work at either the IBM Thomas J. Watson Research Center (Yorktown Heights, NY, USA) or IBM Research–Almaden (San Jose, CA, USA) for up to twelve weeks during the summer of 2022.
-
-_[Quantum Undergraduate Research at IBM and Princeton (QURIP)](https://www.ibm.com/quantum-computing/internship/qurip/) interns will work at Princeton for six weeks followed by six weeks at the IBM Thomas J. Watson Research Center (Yorktown Heights, NY, USA)._
-
-### Other IBM Quantum Internships
-
-- [Quantum Community Developer Intern, United States](https://careers.ibm.com/job/14836566/quantum-community-developer-intern-graduate-remote/) (Master’s/PhD)
-- [Quantum Partner Team Internship, United States](https://careers.ibm.com/job/14679935/quantum-partner-team-internship-2022-masters-phd-remote/) (Master’s/PhD)
-- [Quantum Marketing Summer Intern](https://careers.ibm.com/job/14993324/quantum-marketing-summer-intern-remote/)
-- [Quantum Advocate, Tokyo, Japan](https://careers.ibm.com/job/14446098/-quantum-advocate-tokyo-student-intern-intern-trl-ibm-japan-tokyo-jp/)
-- [Quantum Advocate, Tokyo, Japan](https://careers.ibm.com/job/14446121/-quantum-advocate-tokyo-student-intern-intern-trl-ibm-japan-tokyo-jp/)
-- [Quantum Research Student Intern, Tokyo, Japan](https://careers.ibm.com/job/14181387/-ibm-quantum-research-tokyo-student-intern-intern-trl-ibm-japan-tokyo-jp/)
-- [Quantum Research Student Intern, Tokyo, Japan](https://careers.ibm.com/job/14181430/-ibm-quantum-research-tokyo-student-intern-intern-trl-ibm-japan-tokyo-jp/)
-- [BlueCamp Internship Program: Developer for Quantum Community, Spain](https://careers.ibm.com/job/15066867/bluecamp-internship-program-developer-for-quantum-community-remote/)
-
-### General Tips on applying
-
-Applicants should submit their resume to the appropriate job requisite listed above. Please do not send your resume through email or other channels unless specifically requested. And please do not send a cover letter or recommendation letters unless specifically requested.
-
-### Questions
-
-If you have any questions about IBM Quantum internships not addressed here then please send an email to quantum@us.ibm.com and we will do our best to get back to you with a response.
-
-We hope you will consider launching your career in the field of quantum computing here at IBM. We look forward to hearing from you!
-
-## Entry Level Roles
-
-***Please check back later for more entry level roles.***
+- [Bootstrap Icons](https://icons.getbootstrap.com/)
+- [React](https://reactjs.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Pokemon Ball Spinner](https://www.youtube.com/watch?v=PZzxbhf9KaM)
+- [Cypress](https://www.cypress.io/)
