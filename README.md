@@ -7,7 +7,7 @@ Hi! I'm Dalina and I'm on a mission to complete this challenge!
 ### Frontend Challenge
 
 challenge: `<project_main/challenges/frontend>`
-solution: `<project_main>/solutions/pokemon`
+solution: `<project_main>/solutions/pokedex`
 
 #### Run the app
 
@@ -21,8 +21,9 @@ $ npm run start
 ```
 
 #### Other commands
-Run end to end tests (Run the app first before running e2e tests): `npm run test:e2e`
 
+End to End testing path: `<project_main>/solutions/pokedex/cypress`
+Run end to end tests (Run the app first before running e2e tests): `npm run test:e2e`
 Run end to end tests command line interface (Run the app first before running e2e tests): `npm run test:e2e-ci`
 
 Run linters: `npm run lint`
