@@ -32,7 +32,7 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
      * Renders the pokemon card image and navigates to pokemon card on click.
      * @returns Card image
      */
-    const renderImage = (pm: any) => <Card.Img src={pm.image} onClick={() => navigate(`/${pm.name}`)} />;
+    const renderImage = (pm: any) => <Card.Img src={pm.image} data-cy={`card-image-${pm.name}`} onClick={() => navigate(`/${pm.name}`)} />;
 
     /**
      * Renders the pokemon card title
@@ -57,6 +57,7 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
         type='checkbox'
         checked={pm?.isFavorite}
         value={String(pm?.isFavorite)}
+        data-cy={`toggle-favorite-${pm.name}`}
         onChange={(change) => handleChangeFavorite(pm, change)} >
         <span className={isFavorite ? 'bi bi-heart-fill' : 'bi bi-heart'} style={{ color: 'red', fontSize: '25px' }} />
     </ToggleButton>;
@@ -78,7 +79,7 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
      * @returns The pokemon card component
      */
     const renderPokemonCardComponent = () => {
-        return <Card className='h-100' id={`card-pokemon-${props.pokemon.id}`} key={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: 0, padding: 0 }}>
+        return <Card className='h-100' id={`card-pokemon-${props.pokemon.id}`} key={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: 0, padding: 0 }} data-cy={`card-pokemon-${props.pokemon.name}`}>
             <Card.Body>
                 <Row>
                     {props.cardType === 'Pokemon' && <Col xs={2} style={{ padding: 0, display: 'flex', alignItems: 'flex-end' }}>{renderSound(props.pokemon)}</Col>}
@@ -142,7 +143,7 @@ export const PokemonCardComponent = (props: PokemonCardProps) => {
      * @returns The pokemon list component
      */
     const renderListComponent = () => {
-        return <Card id={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: '0px' }} >
+        return <Card id={`card-pokemon-${props.pokemon.id}`} style={{ borderRadius: '0px' }} data-cy={`card-pokemon-${props.pokemon.name}`} >
             <Container fluid>
                 <Row>
                     <Col xs={2} md={2} lg={2}>

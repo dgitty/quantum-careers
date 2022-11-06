@@ -46,18 +46,18 @@ export const PokemonDetailPage = () => {
     return (
         <Loader loading={loading!}>
             <Container style={{ overflowX: 'hidden', padding: 10 }}  >
-                <div id={`div-pokemon-card-${pokemon?.id}`} className='mb-1' key={`div-pokemon-card-${pokemon?.id}`}>
+                <div id={`div-pokemon-card-${pokemon?.id}`} className='mb-1' key={`div-pokemon-card-${pokemon?.id}`} data-cy={`pokemon-detail-${pokemon?.name}`}>
                     <PokemonCardComponent pokemon={pokemon!} handleFavorite={handleChangeFavorite} cardType='Pokemon'/>
                 </div>
                 <Row><h1>Evolutions</h1></Row>
                 <Row xs={3} md={5} lg={7} >
                     {pokemon?.previousEvolutions.map(prev => {
-                        return <Col  style={{ padding: 2 }} key={`previous-evolution-${prev.id}`}>
+                        return <Col  style={{ padding: 2 }} key={`previous-evolution-${prev.id}`} data-cy={`previous-evolution-${pokemon?.name}`}>
                             <PokemonCardComponent pokemon={prev!} handleFavorite={handleChangeFavorite} cardType='Evolution'/>
                         </Col>
                     })}
                     {pokemon?.evolutions.map(evol => {
-                        return <Col  style={{ padding: 2 }} key={`evolution-${evol.id}`}>
+                        return <Col  style={{ padding: 2 }} key={`evolution-${evol.id}`} data-cy={`evolution-${pokemon?.name}`}>
                             <PokemonCardComponent pokemon={evol!} handleFavorite={handleChangeFavorite} cardType='Evolution'/>
                         </Col>
                     })}

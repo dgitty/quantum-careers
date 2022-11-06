@@ -12,16 +12,16 @@ export const Home = () => {
   // Variables associated to user input
   const [showList, setShowList] = useState(false);
   const views = [
-    { name: 'Grid', className: 'bi bi-list', value: false, style: { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 1, fontSize: '25px', borderLeft: 0, borderBottom: 0, borderTop: 0, borderRight: 'solid', borderWidth: '1px', borderColor: '#DCDCDC' } },
-    { name: 'List', className: 'bi bi-grid-3x2-gap-fill', value: true, style: { paddingTop: 0, paddingBottom: 0, paddingLeft: 3, paddingRight: 0, fontSize: '24px' } },
+    { name: 'Grid', 'data-cy': 'toggle-view-grid', className: 'bi bi-list', value: false, style: { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 1, fontSize: '25px', borderLeft: 0, borderBottom: 0, borderTop: 0, borderRight: 'solid', borderWidth: '1px', borderColor: '#DCDCDC' } },
+    { name: 'List', 'data-cy': 'toggle-view-list', className: 'bi bi-grid-3x2-gap-fill', value: true, style: { paddingTop: 0, paddingBottom: 0, paddingLeft: 3, paddingRight: 0, fontSize: '24px' } },
   ];
 
   const [showFavorite, setShowFavorite] = useState<boolean | undefined>();
   const showValues = [
     // All is set to undefined instead of false so that
     // the request data returns all items instead of unfavorited items
-    { name: 'All', value: undefined },
-    { name: 'Favorites', value: true },
+    { name: 'All', value: undefined, 'data-cy': 'toggle-show-all' },
+    { name: 'Favorites', value: true, 'data-cy': 'toggle-show-favorites' },
   ];
 
   const [selectedPokemonType, setSelectedPokemonType] = useState('');
@@ -42,7 +42,7 @@ export const Home = () => {
   const fetchData = useCallback(() => {
     let mounted = true;
 
-    Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons({limit:LIMIT, offset:offset})])
+    Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons({ limit: LIMIT, offset: offset })])
       .then(([pokemonTypeList, pokemonList]) => {
         if (mounted) {
           setPokemonTypes(pokemonTypeList);
@@ -79,7 +79,7 @@ export const Home = () => {
     let changeShowFavorite = change.currentTarget.value === 'true' ? true : undefined;
     setShowFavorite(changeShowFavorite);
     // Show favorites otherwise show all
-    pokemonService.getPokemons({limit:LIMIT, search:searchText, isFavorite:changeShowFavorite, type:selectedPokemonType}).then((pokemonList) => setPokemons(pokemonList));
+    pokemonService.getPokemons({ limit: LIMIT, search: searchText, isFavorite: changeShowFavorite, type: selectedPokemonType }).then((pokemonList) => setPokemons(pokemonList));
   }
 
   /**
@@ -89,7 +89,7 @@ export const Home = () => {
   const handleSelectPokemonType = (change: ChangeEvent<HTMLSelectElement>) => {
     let changeType = change.target.value
     setSelectedPokemonType(changeType);
-    pokemonService.getPokemons({limit:LIMIT,  search:searchText, isFavorite:showFavorite, type:changeType}).then((pokemonList) => setPokemons(pokemonList));
+    pokemonService.getPokemons({ limit: LIMIT, search: searchText, isFavorite: showFavorite, type: changeType }).then((pokemonList) => setPokemons(pokemonList));
   }
 
   /**
@@ -99,7 +99,7 @@ export const Home = () => {
   const handleSearchText = (change: ChangeEvent<HTMLInputElement>) => {
     let changeSearch = change.target.value
     setSearchText(changeSearch);
-    pokemonService.getPokemons({limit:LIMIT,  search:changeSearch, isFavorite:showFavorite, type:selectedPokemonType}).then((pokemonList) => setPokemons(pokemonList));
+    pokemonService.getPokemons({ limit: LIMIT, search: changeSearch, isFavorite: showFavorite, type: selectedPokemonType }).then((pokemonList) => setPokemons(pokemonList));
   }
 
   /**
@@ -110,7 +110,7 @@ export const Home = () => {
     // if isfavorite then post favorite otherwise unfavorite and if showing favorite then update favorite pokemon list
     pokemon.isFavorite ? pokemonService.postPokemonFavorite(pokemon.id)
       : pokemonService.postPokemonUnfavorite(pokemon.id).then(() => {
-        showFavorite && pokemonService.getPokemons({limit:LIMIT, search:searchText, isFavorite:showFavorite, type:selectedPokemonType}).then((pokemonList) => setPokemons(pokemonList));
+        showFavorite && pokemonService.getPokemons({ limit: LIMIT, search: searchText, isFavorite: showFavorite, type: selectedPokemonType }).then((pokemonList) => setPokemons(pokemonList));
       });
   }
 
@@ -130,6 +130,7 @@ export const Home = () => {
                   value={String(showValue.value)}
                   checked={showFavorite === showValue.value}
                   onChange={handleShow}
+                  data-cy={showValue['data-cy']}
                 >
                   {showValue.name}
                 </ToggleButton>
@@ -137,18 +138,27 @@ export const Home = () => {
             </ButtonGroup>
           </Row>
           <Row style={{ padding: 0 }}>
-            <Col style={{paddingRight:0}}>
-              <Form.Control style={{ borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} type='text' placeholder='Search' onChange={handleSearchText} value={searchText} />
+            <Col style={{ paddingRight: 0 }}>
+              <Form.Control style={{ borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }}
+                type='text'
+                placeholder='Search'
+                onChange={handleSearchText}
+                value={searchText}
+                data-cy='form-search-text'
+                />
             </Col>
-            <Col xs={'auto'} style={{paddingRight:0}}>
-              <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }} onChange={handleSelectPokemonType} value={selectedPokemonType}>
+            <Col xs={'auto'} style={{ paddingRight: 0 }}>
+              <Form.Select style={{ minWidth: 'max-content', borderRadius: '0px', border: 'none', backgroundColor: '#F0F0F0' }}
+                onChange={handleSelectPokemonType}
+                value={selectedPokemonType}
+                data-cy='form-select-type'>
                 <option value=''>Type</option>
                 {pokemonTypes.map((pokemonType) => {
                   return <option key={pokemonType} value={pokemonType} >{pokemonType}</option>
                 })}
               </Form.Select>
             </Col>
-            <Col xs={'auto'} style={{paddingLeft:2}}  >
+            <Col xs={'auto'} style={{ paddingLeft: 2 }}  >
               <ButtonGroup >
                 {views.map((view) => <ToggleButton style={view.style}
                   id={`toggle-${view.name}`}
@@ -157,6 +167,7 @@ export const Home = () => {
                   type='checkbox'
                   checked={view.value}
                   value={String(view.value)}
+                  data-cy={view['data-cy']}
                   onChange={(change) => setShowList(change.target.checked)} className={view.className}>
                 </ToggleButton>
                 )}
@@ -173,10 +184,10 @@ export const Home = () => {
             loader={<></>}
           >
             <Container fluid style={{ overflowX: 'hidden' }}>
-              <Row xs={showList ? 1 : 3} md={showList ? 1 : 5} lg={showList ? 1 : 7} >
+              <Row xs={showList ? 1 : 3} md={showList ? 1 : 5} lg={showList ? 1 : 7} data-cy='row-pokemons' >
                 {pokemons?.items.map((pokemon) => {
-                  return <Col style={{ padding: 2 }} key={`pokemon-card-${pokemon.id}`} >
-                    <PokemonCardComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'/>
+                  return <Col style={{ padding: 2 }} key={`pokemon-card-${pokemon.id}`} data-cy='card-pokemon-summary'>
+                    <PokemonCardComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary' />
                   </Col>
                 })}
               </Row>

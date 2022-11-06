@@ -24,9 +24,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --coverage",
+    "test:unit": "react-scripts test --coverage",
+    "test:e2e": "cypress open --config-file cypress/cypress.config.ts",
+    "test:e2e-ci": "cypress run --config-file cypress/cypress.config.ts",
     "eject": "react-scripts eject",
-    "lint": "eslint src/"
+    "lint": "eslint src/ cypress/"
   },
   "eslintConfig": {
     "extends": [
@@ -58,8 +60,8 @@
       }
     ]
   },
-  "jest":{
-    "coveragePathIgnorePatterns":[
+  "jest": {
+    "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/tests/",
       ".spec.{js,jsx,ts,tsx}",
@@ -86,6 +88,7 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "babel-jest": "^29.2.2",
+    "cypress": "^10.11.0",
     "jest": "^27.5.1",
     "react-test-renderer": "^18.2.0",
     "sass": "^1.56.0"
