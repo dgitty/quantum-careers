@@ -32,7 +32,7 @@ Run linters: `npm run lint`
 - config.json contains url path and is intended for any configurable items
 - Used infinite scrolling for a seamless look and feel
 - Created a base Pokemon Summary Component to be easily reused as I saw that was content common on several views (i.e. details page and summary)
-- I've considered including .eslintrc.json file and following the style standard but for the sake of time I decided to not include that as I saw there would have been a lot of changes that would be required. I felt that for the scope of this effort, focusing on the feaures was most important.
+- I've considered including .eslintrc.json file and following the style standard but for the sake of time I decided to not include that as I saw there would have been a lot of changes that would be required. I felt that for the scope of this effort, focusing on the feaures was most important. However, I did set some eslint rules in package.json
 - I felt that the styling took a bit more of my time than developing the features/functionality since I was trying to make the app look similar to what was demonstrated in the example video.
 - Transitions css to scss as scss is Syntactically Awesome Style Sheet.
 - Whenever the page is loading it'll display a pokeball spinning which I thought was cool.

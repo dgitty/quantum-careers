@@ -10,11 +10,11 @@ type PokemonCardProps = {
 }
 
 /**
- *
+ * PokemonCardComponent provides the contents to the pokemon card
  * @param props PokemonCardProps
  * @returns A pokemon card summary
  */
-export const PokemonSummaryComponent = (props: PokemonCardProps) => {
+export const PokemonCardComponent = (props: PokemonCardProps) => {
     const [isFavorite, setIsFavorite] = useState<boolean>(props.pokemon.isFavorite);
     const navigate = useNavigate();
     /**

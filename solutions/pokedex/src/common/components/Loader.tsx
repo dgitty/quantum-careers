@@ -1,4 +1,4 @@
-import { Container } from "react-bootstrap"
+import { Container } from 'react-bootstrap'
 
 export const Loader = ({ loading, children }: { loading: boolean, children?: JSX.Element } = { loading: true }) => {
 

@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Row, ButtonGroup, ToggleButton, Form, Col, Container } from 'react-bootstrap';
-import { Loader, PokemonSummaryComponent } from '../common/components';
+import { Loader, PokemonCardComponent } from '../common/components';
 import { PokemonListResponse, PokemonSummary } from '../common/models/pokemon-management';
 import { PokemonService } from '../common/services';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -42,7 +42,7 @@ export const Home = () => {
   const fetchData = useCallback(() => {
     let mounted = true;
 
-    Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons(LIMIT, offset)])
+    Promise.all([pokemonService.getPokemonTypes(), pokemonService.getPokemons({limit:LIMIT, offset:offset})])
       .then(([pokemonTypeList, pokemonList]) => {
         if (mounted) {
           setPokemonTypes(pokemonTypeList);
@@ -79,7 +79,7 @@ export const Home = () => {
     let changeShowFavorite = change.currentTarget.value === 'true' ? true : undefined;
     setShowFavorite(changeShowFavorite);
     // Show favorites otherwise show all
-    pokemonService.getPokemons(LIMIT, undefined, searchText, changeShowFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
+    pokemonService.getPokemons({limit:LIMIT, search:searchText, isFavorite:changeShowFavorite, type:selectedPokemonType}).then((pokemonList) => setPokemons(pokemonList));
   }
 
   /**
@@ -89,7 +89,7 @@ export const Home = () => {
   const handleSelectPokemonType = (change: ChangeEvent<HTMLSelectElement>) => {
     let changeType = change.target.value
     setSelectedPokemonType(changeType);
-    pokemonService.getPokemons(LIMIT, undefined, searchText, showFavorite, changeType).then((pokemonList) => setPokemons(pokemonList));
+    pokemonService.getPokemons({limit:LIMIT,  search:searchText, isFavorite:showFavorite, type:changeType}).then((pokemonList) => setPokemons(pokemonList));
   }
 
   /**
@@ -99,7 +99,7 @@ export const Home = () => {
   const handleSearchText = (change: ChangeEvent<HTMLInputElement>) => {
     let changeSearch = change.target.value
     setSearchText(changeSearch);
-    pokemonService.getPokemons(LIMIT, undefined, changeSearch, showFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
+    pokemonService.getPokemons({limit:LIMIT,  search:changeSearch, isFavorite:showFavorite, type:selectedPokemonType}).then((pokemonList) => setPokemons(pokemonList));
   }
 
   /**
@@ -110,7 +110,7 @@ export const Home = () => {
     // if isfavorite then post favorite otherwise unfavorite and if showing favorite then update favorite pokemon list
     pokemon.isFavorite ? pokemonService.postPokemonFavorite(pokemon.id)
       : pokemonService.postPokemonUnfavorite(pokemon.id).then(() => {
-        showFavorite && pokemonService.getPokemons(LIMIT, undefined, searchText, showFavorite, selectedPokemonType).then((pokemonList) => setPokemons(pokemonList));
+        showFavorite && pokemonService.getPokemons({limit:LIMIT, search:searchText, isFavorite:showFavorite, type:selectedPokemonType}).then((pokemonList) => setPokemons(pokemonList));
       });
   }
 
@@ -149,7 +149,6 @@ export const Home = () => {
               </Form.Select>
             </Col>
             <Col xs={'auto'} style={{paddingLeft:2}}  >
-              {/* style={{ borderRight: 'solid', borderWidth: '1px', borderColor: '#DCDCDC' }} */}
               <ButtonGroup >
                 {views.map((view) => <ToggleButton style={view.style}
                   id={`toggle-${view.name}`}
@@ -176,10 +175,8 @@ export const Home = () => {
             <Container fluid style={{ overflowX: 'hidden' }}>
               <Row xs={showList ? 1 : 3} md={showList ? 1 : 5} lg={showList ? 1 : 7} >
                 {pokemons?.items.map((pokemon) => {
-                  return <Col style={{ padding: 2 }} key={`div-pokemon-card-${pokemon.id}`} >
-                    {/* <div id={`div-pokemon-card-${pokemon.id}`} className='mb-1' key={`div-pokemon-card-${pokemon.id}`} style={{ padding: 2 }}> */}
-                    <PokemonSummaryComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'></PokemonSummaryComponent>
-                    {/* </div> */}
+                  return <Col style={{ padding: 2 }} key={`pokemon-card-${pokemon.id}`} >
+                    <PokemonCardComponent pokemon={pokemon} handleFavorite={handleChangeFavorite} showList={showList} cardType='PokemonSummary'/>
                   </Col>
                 })}
               </Row>

@@ -1,2 +1,2 @@
-export * from './pokemonSummaryComponent';
+export * from './pokemonCardComponent';
 export * from './Loader';

@@ -18,7 +18,7 @@ export class PokemonService extends BaseApiService {
      * @param type Pokemon Type
      * @returns The Pokemon List Response
      */
-    public getPokemons(limit?: number, offset?: number, search?: string, isFavorite?: boolean, type?: string): Promise<PokemonListResponse> {
+    public getPokemons({limit, offset, search, isFavorite, type}:{limit?: number, offset?: number, search?: string, isFavorite?: boolean, type?: string}): Promise<PokemonListResponse> {
         let parameters: { [id: string]: any; } = {};
         if (limit) parameters['limit'] = limit;
         if (offset) parameters['offset'] = offset;
