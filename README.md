@@ -22,11 +22,12 @@ $ npm run start
 
 #### Run Tests
 
-End to End testing path: `<project_main>/solutions/pokedex/cypress`
-
 Run end to end tests (Run the app first before running e2e tests): `npm run test:e2e`
 
 Run end to end tests command line interface (Run the app first before running e2e tests): `npm run test:e2e-ci`
+
+End to End tests exist at the following location: `<project_main>/solutions/pokedex/cypress`
+
 
 #### Other commends
 
