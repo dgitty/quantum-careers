@@ -8,6 +8,11 @@ describe('Home Test', () => {
     cy.visit(Cypress.config().baseUrl)
   })
 
+  it('Contains pokeball loading', () => {
+    // Given the page loading when visited then should contain a pokeball loading
+    cy.getByData('div-pokeball').should('exist')
+  })
+
   it('Contains all and favorite views', () => {
     // Given the page when visited then should contain all and favorite button
     // All button should contain a pokemon
