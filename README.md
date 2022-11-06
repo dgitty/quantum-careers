@@ -35,6 +35,7 @@ Run linters: `npm run lint`
 
 ### Notes
 
+- I went with React as that was what I'm most familiar with and it allows for reuse of compoenents which I like.
 - Created end to end test with cypress as I felt it was best to demonstrate the expected outcomes, behaviours of the features, and what should exist on the ui.
 - Acquired Bootstrap icons from cdn and imported https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css
 - Created BaseApiService to provide and interface to backend api for new services
