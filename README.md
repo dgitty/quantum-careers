@@ -6,9 +6,13 @@ Hi! I'm Dalina and I'm on a mission to complete this challenge!
 
 ### Frontend Challenge
 
-challenge: `<project_main/challenges/frontend>`
-solution: `<project_main>/solutions/pokedex`
-video: `<project_main>/solutions/pokedex/pokedex_challenge.mp4`
+challenge: [Frontend challenge](https://github.com/dgitty/quantum-careers/tree/master/challenges/frontend)
+
+solution: [Pokdex solution](https://github.com/dgitty/quantum-careers/tree/master/solutions/pokedex)
+
+video:
+[![Watch the video]](https://github.com/dgitty/quantum-careers/blob/master/solutions/pokedex/pokedex_challenge.mp4)
+
 
 #### Run the app
 
