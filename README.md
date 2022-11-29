@@ -10,8 +10,10 @@ challenge: [Frontend challenge](https://github.com/dgitty/quantum-careers/tree/m
 
 solution: [Pokdex solution](https://github.com/dgitty/quantum-careers/tree/master/solutions/pokedex)
 
-video:
-[![Watch the video]](https://github.com/dgitty/quantum-careers/blob/master/solutions/pokedex/pokedex_challenge.mp4)
+https://user-images.githubusercontent.com/11377772/204561101-c2627283-1359-476b-8cd2-fd6f7705ffc4.mp4
+
+
+
 
 
 #### Run the app
